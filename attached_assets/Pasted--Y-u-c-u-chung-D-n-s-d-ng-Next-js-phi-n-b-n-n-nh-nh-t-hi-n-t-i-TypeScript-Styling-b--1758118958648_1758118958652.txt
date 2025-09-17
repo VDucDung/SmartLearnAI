@@ -1,0 +1,120 @@
+👉 Yêu cầu chung:
+
+Dự án sử dụng Next.js (phiên bản ổn định nhất hiện tại) + TypeScript.
+
+Styling bằng TailwindCSS (kết hợp shadcn/ui cho component).
+
+Dùng Framer Motion cho animation mượt.
+
+Layout tối giản, hiện đại, gam màu sáng – tối đều có (dark mode switch).
+
+UI tham khảo: https://phamgiang.net
+.
+
+📌 Các trang & tính năng FE cần có:
+1. Trang Login / Register
+
+Login bằng Email + Password.
+
+Login bằng Google (OAuth).
+
+Quên mật khẩu → nhập email → gửi mã xác thực (hoặc để admin reset).
+
+Form đẹp, responsive, có hiệu ứng.
+
+2. Trang User Dashboard (sau khi login)
+
+Hiển thị:
+
+Tên người dùng
+
+Ngày tạo tài khoản
+
+Số dư hiện tại
+
+Tool đã mua
+
+Có nút Nạp tiền (hiển thị QR code, tự động đọc mail từ API để cộng tiền).
+
+UI giống dạng Card Grid, hiện đại.
+
+3. Trang Admin Panel (chỉ admin thấy)
+
+Chức năng quản lý:
+
+Đăng / chỉnh sửa tool (ảnh, tên, mô tả, video demo, HDSD, lượt xem).
+
+Quản lý user (nạp tiền, reset mật khẩu, xoá tool, ban user).
+
+Quản lý mã giảm giá.
+
+4. Trang Mua Tool
+
+Tool có card riêng:
+
+Tên tool
+
+Giá
+
+Button Mua ngay
+
+Input mã giảm giá
+
+Sau khi mua: Tool được thêm vào bảng "Tool đã mua".
+
+5. Trang Tool đã mua
+
+Bảng hiển thị:
+
+Tên tool
+
+Link download
+
+Hạn sử dụng (HSD) → tự động đếm lùi theo ngày
+
+Nút Đổi key
+
+Khi hết HSD → tool bị xoá tự động khỏi bảng.
+
+6. API check key
+
+Tool (C# app) sẽ gửi Key lên web.
+
+Nếu tồn tại → trả về: { userName, HSD }.
+
+Nếu không tồn tại → trả về false.
+
+UI: Admin có thể xem log check key.
+
+7. Lịch sử
+
+Lịch sử nạp tiền (hiển thị số tiền, ngày, nội dung).
+
+Lịch sử mua tool (tên tool, ngày mua, gói mua).
+
+8. Chi tiết Tool
+
+Khi user bấm vào tool → mở trang chi tiết:
+
+Video demo (embed player).
+
+Hướng dẫn sử dụng (markdown editor render).
+
+Số lượt xem.
+
+Button liên hệ (telegram, zalo, email).
+
+🎨 UI/UX yêu cầu:
+
+Responsive (desktop / mobile).
+
+Sidebar navigation cho dashboard & admin panel.
+
+Hero section + card layout gọn gàng.
+
+Animation hover + chuyển trang mượt.
+
+Font hiện đại (Inter hoặc Poppins).
+
+👉 Kết quả mong muốn:
+FE hoàn chỉnh, UI đẹp, sẵn sàng kết nối BE qua API. Ưu tiên code sạch, tách component rõ ràng, dễ mở rộng.
