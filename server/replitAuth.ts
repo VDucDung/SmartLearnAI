@@ -128,6 +128,21 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  // Check for demo authentication first
+  if ((req.session as any)?.demoUser) {
+    const demoUser = (req.session as any).demoUser;
+    // Create a mock req.user structure for compatibility
+    (req as any).user = {
+      claims: {
+        sub: demoUser.id,
+        email: demoUser.email,
+      },
+      isAdmin: demoUser.isAdmin,
+    };
+    return next();
+  }
+
+  // Original Replit OIDC authentication logic
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {

@@ -5,13 +5,120 @@ import { setupAuth, isAuthenticated } from "./replitAuth";
 import { z } from "zod";
 import { insertToolSchema, insertCategorySchema, insertDiscountCodeSchema } from "@shared/schema";
 
+// Demo user credentials
+const DEMO_USERS = {
+  demo: {
+    id: "demo-user-1",
+    username: "demo",
+    password: "demo123",
+    email: "demo@example.com",
+    firstName: "Demo",
+    lastName: "User", 
+    profileImageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150",
+    balance: "1000000",
+    isAdmin: false,
+  },
+  admin: {
+    id: "admin-user-1", 
+    username: "admin",
+    password: "admin123",
+    email: "admin@example.com",
+    firstName: "Admin",
+    lastName: "User",
+    profileImageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150",
+    balance: "5000000",
+    isAdmin: true,
+  }
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // Demo login endpoint
+  app.post('/api/auth/demo-login', async (req, res) => {
     try {
+      const { username, password } = req.body;
+      
+      // Check if credentials match demo users
+      const user = Object.values(DEMO_USERS).find(u => u.username === username && u.password === password);
+      
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Create a demo session by storing user info in session
+      (req.session as any).demoUser = user;
+      
+      // Ensure demo user exists in storage for backend compatibility
+      try {
+        await storage.upsertUser({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profileImageUrl: user.profileImageUrl,
+          balance: user.balance,
+          isAdmin: user.isAdmin,
+        });
+      } catch (storageError) {
+        console.error("Error upserting demo user to storage:", storageError);
+        // Continue even if storage fails - demo might work without DB
+      }
+      
+      res.json({ 
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profileImageUrl: user.profileImageUrl,
+          balance: user.balance,
+          isAdmin: user.isAdmin,
+        }
+      });
+    } catch (error) {
+      console.error("Error during demo login:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // Demo logout endpoint
+  app.post('/api/auth/demo-logout', async (req, res) => {
+    try {
+      delete (req.session as any).demoUser;
+      res.json({ message: "Logout successful" });
+    } catch (error) {
+      console.error("Error during demo logout:", error);
+      res.status(500).json({ message: "Logout failed" });
+    }
+  });
+
+  // Auth routes - Modified to support both demo and real auth
+  app.get('/api/auth/user', async (req: any, res) => {
+    try {
+      // Check if user is using demo authentication
+      if ((req.session as any)?.demoUser) {
+        const demoUser = (req.session as any).demoUser;
+        return res.json({
+          id: demoUser.id,
+          email: demoUser.email,
+          firstName: demoUser.firstName,
+          lastName: demoUser.lastName,
+          profileImageUrl: demoUser.profileImageUrl,
+          balance: demoUser.balance,
+          isAdmin: demoUser.isAdmin,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+      
+      // Original authentication logic
+      if (!req.isAuthenticated() || !req.user?.claims?.sub) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
       const userId = req.user.claims.sub;
       const user = await storage.getUser(userId);
       if (!user) {

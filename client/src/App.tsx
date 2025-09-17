@@ -16,14 +16,19 @@ import Deposit from "@/pages/Deposit";
 import History from "@/pages/History";
 import AdminPanel from "@/pages/AdminPanel";
 import Checkout from "@/pages/Checkout";
+import Login from "@/pages/Login";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
   return (
     <Switch>
+      <Route path="/login" component={Login} />
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+        <>
+          <Route path="/" component={Landing} />
+          <Route path="/tools" component={Tools} />
+        </>
       ) : (
         <>
           <Route path="/" component={Home} />

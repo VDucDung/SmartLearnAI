@@ -2,11 +2,9 @@ import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { ToolCard } from "@/components/ToolCard";
 import { motion } from "framer-motion";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { apiRequest } from "@/lib/queryClient";
+import { mockTools, mockCategories } from "@/lib/mockData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,100 +30,56 @@ import type { Tool, Category } from "@shared/schema";
 export default function Tools() {
   const { isAuthenticated } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
-  const [discountCode, setDiscountCode] = useState("");
+  const [selectedTool, setSelectedTool] = useState<typeof mockTools[0] | null>(null);
 
-  const { data: tools, isLoading: toolsLoading } = useQuery<(Tool & { category?: Category })[]>({
-    queryKey: ["/api/tools"],
-  });
+  // Use mock data instead of API calls
+  const tools = mockTools;
+  const categories = mockCategories;
+  const toolsLoading = false;
+  const categoriesLoading = false;
 
-  const { data: categories, isLoading: categoriesLoading } = useQuery<Category[]>({
-    queryKey: ["/api/categories"],
-  });
+  // Mock purchase function - no actual payment processing
+  const handlePurchaseSuccess = () => {
+    toast({
+      title: "Demo: Mua thành công",
+      description: "Đây là demo - không có giao dịch thật sự được thực hiện",
+    });
+    setPurchaseDialogOpen(false);
+    setSelectedTool(null);
+  };
 
-  const purchaseMutation = useMutation({
-    mutationFn: async ({ toolId, discountCodeId }: { toolId: string; discountCodeId?: string }) => {
-      return await apiRequest("POST", "/api/purchases", { toolId, discountCodeId });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Mua thành công",
-        description: "Công cụ đã được thêm vào danh sách đã mua",
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/purchases"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      setPurchaseDialogOpen(false);
-      setSelectedTool(null);
-      setDiscountCode("");
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-      
-      toast({
-        title: "Lỗi",
-        description: error.message || "Không thể mua công cụ",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const validateDiscountMutation = useMutation({
-    mutationFn: async (code: string) => {
-      const response = await apiRequest("POST", "/api/discount-codes/validate", { code });
-      return await response.json();
-    },
-    onSuccess: (data) => {
-      toast({
-        title: "Mã giảm giá hợp lệ",
-        description: `Giảm ${data.discountType === 'percentage' ? data.discountValue + '%' : Number(data.discountValue).toLocaleString('vi-VN') + '₫'}`,
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Mã giảm giá không hợp lệ",
-        description: error.message || "Mã giảm giá không tồn tại hoặc đã hết hạn",
-        variant: "destructive",
-      });
-    },
-  });
+  // Mock discount validation - demo only  
+  const handleValidateDiscount = () => {
+    toast({
+      title: "Demo: Mã giảm giá",
+      description: "Đây là chức năng demo - không có mã giảm giá thật",
+      variant: "default",
+    });
+  };
 
   // Filter tools based on search and category
-  const filteredTools = tools?.filter(tool => {
+  const filteredTools = tools.filter(tool => {
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || tool.categoryId === selectedCategory;
     return matchesSearch && matchesCategory;
-  }) || [];
+  });
 
   const handlePurchase = (toolId: string) => {
     if (!isAuthenticated) {
       toast({
         title: "Cần đăng nhập",
-        description: "Vui lòng đăng nhập để mua công cụ",
-        variant: "destructive",
+        description: "Vui lòng đăng nhập để xem demo mua hàng",
+        variant: "default",
       });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
       return;
     }
 
-    const tool = tools?.find(t => t.id === toolId);
+    const tool = tools.find(t => t.id === toolId);
     if (tool) {
       setSelectedTool(tool);
       setPurchaseDialogOpen(true);
@@ -134,17 +88,7 @@ export default function Tools() {
 
   const handleConfirmPurchase = () => {
     if (!selectedTool) return;
-    
-    purchaseMutation.mutate({
-      toolId: selectedTool.id,
-      discountCodeId: discountCode || undefined,
-    });
-  };
-
-  const handleValidateDiscount = () => {
-    if (discountCode.trim()) {
-      validateDiscountMutation.mutate(discountCode.trim());
-    }
+    handlePurchaseSuccess();
   };
 
   return (
@@ -329,24 +273,22 @@ export default function Tools() {
                   </div>
                 </div>
                 
-                {/* Discount Code Input */}
+                {/* Demo - Discount Code (disabled) */}
                 <div className="space-y-2">
-                  <Label htmlFor="discount-code">Mã giảm giá (tùy chọn)</Label>
+                  <Label htmlFor="discount-code">Mã giảm giá (demo)</Label>
                   <div className="flex gap-2">
                     <Input
                       id="discount-code"
-                      placeholder="Nhập mã giảm giá"
-                      value={discountCode}
-                      onChange={(e) => setDiscountCode(e.target.value)}
+                      placeholder="Chức năng demo - không thực tế"
+                      disabled
                       data-testid="input-discount-code"
                     />
                     <Button
                       variant="outline"
                       onClick={handleValidateDiscount}
-                      disabled={!discountCode.trim() || validateDiscountMutation.isPending}
                       data-testid="button-validate-discount"
                     >
-                      Kiểm tra
+                      Demo
                     </Button>
                   </div>
                 </div>
@@ -363,10 +305,9 @@ export default function Tools() {
               </Button>
               <Button 
                 onClick={handleConfirmPurchase}
-                disabled={purchaseMutation.isPending}
                 data-testid="button-confirm-purchase"
               >
-                {purchaseMutation.isPending ? "Đang xử lý..." : "Xác nhận mua"}
+                Xác nhận mua (Demo)
               </Button>
             </DialogFooter>
           </DialogContent>

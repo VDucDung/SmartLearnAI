@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import { Moon, Sun, Menu } from "lucide-react";
 import {
   DropdownMenu,
@@ -17,6 +18,33 @@ export function Header() {
   const [location] = useLocation();
   const { theme, setTheme } = useTheme();
   const { user, isAuthenticated } = useAuth();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/demo-logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Đăng xuất thành công",
+          description: "Hẹn gặp lại bạn!",
+        });
+        window.location.reload();
+      } else {
+        // Fallback to original logout for non-demo users
+        window.location.href = "/api/logout";
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback to original logout
+      window.location.href = "/api/logout";
+    }
+  };
 
   const navigation = [
     { name: "Trang chủ", href: "/" },
@@ -74,21 +102,23 @@ export function Header() {
             {/* Auth Buttons */}
             {!isAuthenticated ? (
               <div className="flex items-center space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => (window.location.href = "/api/login")}
-                  data-testid="button-login"
-                >
-                  Đăng nhập
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => (window.location.href = "/api/login")}
-                  data-testid="button-register"
-                >
-                  Đăng ký
-                </Button>
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    data-testid="button-login"
+                  >
+                    Đăng nhập Demo
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button
+                    size="sm"
+                    data-testid="button-register"
+                  >
+                    Dùng thử Demo
+                  </Button>
+                </Link>
               </div>
             ) : (
               <DropdownMenu>
@@ -103,8 +133,17 @@ export function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex flex-col space-y-1 p-2">
+                    <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    {user?.isAdmin && (
+                      <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
+                        Admin
+                      </span>
+                    )}
+                  </div>
                   <DropdownMenuItem
-                    onClick={() => (window.location.href = "/api/logout")}
+                    onClick={handleLogout}
                     data-testid="button-logout"
                   >
                     Đăng xuất
