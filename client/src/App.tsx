@@ -26,12 +26,13 @@ function Router() {
       <Route path="/login" component={Login} />
       {isLoading || !isAuthenticated ? (
         <>
-          <Route path="/" component={Landing} />
+          <Route path="/" component={Tools} />
           <Route path="/tools" component={Tools} />
+          <Route path="/landing" component={Landing} />
         </>
       ) : (
         <>
-          <Route path="/" component={Home} />
+          <Route path="/" component={Tools} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/tools" component={Tools} />
           <Route path="/tools/:id" component={ToolDetails} />
@@ -41,6 +42,7 @@ function Router() {
           <Route path="/admin" component={AdminPanel} />
           <Route path="/admin/:section" component={AdminPanel} />
           <Route path="/checkout" component={Checkout} />
+          <Route path="/home" component={Home} />
         </>
       )}
       <Route component={NotFound} />

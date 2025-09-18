@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
+import { Footer } from "./Footer";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,9 +12,9 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <div className="flex">
+      <div className="flex flex-1">
         {isAuthenticated && showSidebar && (
           <div className="hidden lg:flex lg:flex-shrink-0">
             <Sidebar />
@@ -23,6 +24,7 @@ export function Layout({ children, showSidebar = false }: LayoutProps) {
           {children}
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

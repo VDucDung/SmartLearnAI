@@ -3,4 +3,5 @@
 [x] 3. Verify the project is working using the feedback tool
 [x] 4. Remove payment features and implement mock data
 [x] 5. Add default authentication with demo credentials
-[x] 6. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
+[x] 6. Update homepage to display tools directly with "TOOL NRO" title
+[x] 7. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool

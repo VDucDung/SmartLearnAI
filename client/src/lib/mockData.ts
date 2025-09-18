@@ -29,15 +29,21 @@ export const mockCategories = [
 export const mockTools = [
   {
     id: "1",
-    name: "SEO Keyword Research Pro",
-    description: "Công cụ nghiên cứu từ khóa chuyên nghiệp giúp bạn tìm ra các từ khóa có tiềm năng cao cho website của mình.",
+    name: "NHẶT NGỌC HÀNG NGÀY",
+    description: "Công cụ tự động nhặt ngọc hàng ngày trong game",
     price: "299000",
+    prices: [
+      { duration: "7 ngày", amount: "15000" },
+      { duration: "30 ngày", amount: "50000" }, 
+      { duration: "Vĩnh viễn", amount: "250000" }
+    ],
     categoryId: "1",
-    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
-    instructions: "# Hướng dẫn sử dụng SEO Keyword Research Pro\n\n## Bước 1: Cài đặt\n1. Tải file và giải nén\n2. Chạy file setup.exe\n\n## Bước 2: Sử dụng\n1. Nhập từ khóa gốc\n2. Chọn khu vực mục tiêu\n3. Phân tích kết quả",
-    downloadUrl: "https://example.com/download/seo-pro",
-    views: 1250,
+    instructions: null,
+    downloadUrl: "https://example.com/download/nhat-ngoc",
+    views: 3005,
+    purchases: 233,
     rating: "4.8",
     reviewCount: 89,
     isActive: true,
@@ -46,17 +52,23 @@ export const mockTools = [
     category: mockCategories[0]
   },
   {
-    id: "2",
-    name: "Social Media Scheduler",
-    description: "Lên lịch và quản lý nội dung trên các nền tảng mạng xã hội một cách tự động và hiệu quả.",
-    price: "199000", 
-    categoryId: "2",
-    imageUrl: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    id: "2", 
+    name: "NHẬN THƯỞNG NGỌC RỒNG ĐEN",
+    description: "Tự động nhận thưởng ngọc rồng đen",
+    price: "199000",
+    prices: [
+      { duration: "7 ngày", amount: "15000" },
+      { duration: "30 ngày", amount: "50000" },
+      { duration: "Vĩnh viễn", amount: "200000" }
+    ],
+    categoryId: "2", 
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
     instructions: null,
-    downloadUrl: "https://example.com/download/social-scheduler",
-    views: 850,
-    rating: "4.6",
+    downloadUrl: "https://example.com/download/nhan-thuong",
+    views: 3010,
+    purchases: 724,
+    rating: "4.6", 
     reviewCount: 42,
     isActive: true,
     createdAt: new Date(),
@@ -65,15 +77,21 @@ export const mockTools = [
   },
   {
     id: "3",
-    name: "Logo Design Assistant",
-    description: "Công cụ thiết kế logo thông minh với AI giúp tạo ra những logo chuyên nghiệp trong vài phút.",
+    name: "BOT BÁN ITEM", 
+    description: "Tự động bán item trong game",
     price: "399000",
-    categoryId: "3", 
-    imageUrl: "https://images.unsplash.com/photo-1626785774625-0b0c2493f8bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    prices: [
+      { duration: "7 ngày", amount: "15000" },
+      { duration: "30 ngày", amount: "50000" },
+      { duration: "Vĩnh viễn", amount: "300000" }
+    ],
+    categoryId: "3",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
-    instructions: null,
-    downloadUrl: "https://example.com/download/logo-designer",
-    views: 2100,
+    instructions: null, 
+    downloadUrl: "https://example.com/download/bot-ban-item",
+    views: 7267,
+    purchases: 354,
     rating: "4.9",
     reviewCount: 156,
     isActive: true,
@@ -83,15 +101,21 @@ export const mockTools = [
   },
   {
     id: "4",
-    name: "Website Analytics Dashboard",
-    description: "Bảng điều khiển phân tích website toàn diện với các chỉ số quan trọng và báo cáo chi tiết.",
-    price: "599000",
+    name: "AUTO BÁN ĐỒ KHO BẢU",
+    description: "Tự động bán đồ kho báu trong game",
+    price: "599000", 
+    prices: [
+      { duration: "7 ngày", amount: "35000" },
+      { duration: "30 ngày", amount: "100000" },
+      { duration: "Vĩnh viễn", amount: "500000" }
+    ],
     categoryId: "4",
-    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
     instructions: null,
-    downloadUrl: "https://example.com/download/analytics-dashboard", 
-    views: 720,
+    downloadUrl: "https://example.com/download/auto-ban-do",
+    views: 12063,
+    purchases: 608,
     rating: "4.7",
     reviewCount: 38,
     isActive: true,
@@ -100,40 +124,100 @@ export const mockTools = [
     category: mockCategories[3]
   },
   {
-    id: "5", 
-    name: "Email Marketing Automation",
-    description: "Tự động hóa email marketing với các template đẹp và hệ thống phân khúc khách hàng thông minh.",
+    id: "5",
+    name: "TỰ ĐỘNG ĐÁNH QUÁI",
+    description: "Tool tự động đánh quái và train level",
     price: "450000",
+    prices: [
+      { duration: "7 ngày", amount: "35000" },
+      { duration: "30 ngày", amount: "100000" },
+      { duration: "Vĩnh viễn", amount: "600000" }
+    ],
     categoryId: "2",
-    imageUrl: "https://images.unsplash.com/photo-1557200134-90327ee9fce4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400", 
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
     instructions: null,
-    downloadUrl: "https://example.com/download/email-automation",
-    views: 1680,
-    rating: "4.5", 
+    downloadUrl: "https://example.com/download/auto-danh-quai",
+    views: 8543,
+    purchases: 421,
+    rating: "4.5",
     reviewCount: 73,
     isActive: true,
     createdAt: new Date(),
-    updatedAt: new Date(), 
+    updatedAt: new Date(),
     category: mockCategories[1]
   },
   {
-    id: "6",
-    name: "Content Writing Helper", 
-    description: "Trợ lý viết nội dung AI giúp tạo ra các bài viết, bài đăng mạng xã hội và nội dung marketing chất lượng cao.",
+    id: "6", 
+    name: "TOOL UP ĐỂ VERT",
+    description: "Tool tự động up để vert trong game",
     price: "349000",
+    prices: [
+      { duration: "7 ngày", amount: "15000" },
+      { duration: "30 ngày", amount: "40000" },
+      { duration: "Vĩnh viễn", amount: "250000" }
+    ],
     categoryId: "2",
-    imageUrl: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
     videoUrl: null,
     instructions: null,
-    downloadUrl: "https://example.com/download/content-writer",
-    views: 940,
+    downloadUrl: "https://example.com/download/tool-up-vert",
+    views: 5621,
+    purchases: 298,
     rating: "4.4",
     reviewCount: 56,
     isActive: true,
     createdAt: new Date(),
     updatedAt: new Date(),
     category: mockCategories[1]
+  },
+  {
+    id: "7",
+    name: "TOOL AUTO UP ĐỂ VERT",
+    description: "Phiên bản nâng cao của tool up để vert", 
+    price: "499000",
+    prices: [
+      { duration: "7 ngày", amount: "35000" },
+      { duration: "30 ngày", amount: "100000" },
+      { duration: "Vĩnh viễn", amount: "600000" }
+    ],
+    categoryId: "2",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
+    videoUrl: null,
+    instructions: null,
+    downloadUrl: "https://example.com/download/tool-auto-up-vert",
+    views: 4532,
+    purchases: 187,
+    rating: "4.6",
+    reviewCount: 34,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: mockCategories[1]
+  },
+  {
+    id: "8",
+    name: "TOOL UP CAPSULE XI BỊ",
+    description: "Tool tự động up capsule xi bị",
+    price: "399000",
+    prices: [
+      { duration: "7 ngày", amount: "35000" },
+      { duration: "30 ngày", amount: "100000" },
+      { duration: "Vĩnh viễn", amount: "600000" }
+    ],
+    categoryId: "3",
+    imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200",
+    videoUrl: null,
+    instructions: null,
+    downloadUrl: "https://example.com/download/tool-capsule",
+    views: 3245,
+    purchases: 156,
+    rating: "4.3",
+    reviewCount: 28,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: mockCategories[2]
   }
 ];
 
@@ -161,6 +245,76 @@ export const mockAdminUser = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
+// Mock payments data for history
+export const mockPayments = [
+  {
+    id: "payment-1",
+    userId: "user-1",
+    type: "deposit",
+    amount: "500000",
+    status: "completed",
+    description: "Nạp tiền vào tài khoản",
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: "payment-2", 
+    userId: "user-1",
+    type: "purchase",
+    amount: "-15000",
+    status: "completed",
+    description: "Mua NHẶT NGỌC HÀNG NGÀY (7 ngày)",
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: "payment-3",
+    userId: "user-1", 
+    type: "purchase",
+    amount: "-50000",
+    status: "completed",
+    description: "Mua BOT BÁN ITEM (30 ngày)",
+    createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+    updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000)
+  },
+  {
+    id: "payment-4",
+    userId: "user-1",
+    type: "deposit", 
+    amount: "1000000",
+    status: "pending",
+    description: "Nạp tiền qua chuyển khoản",
+    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
+    updatedAt: new Date(Date.now() - 1 * 60 * 60 * 1000)
+  }
+];
+
+// Mock purchases data for history
+export const mockPurchases = [
+  {
+    id: "purchase-1",
+    userId: "user-1",
+    toolId: "1",
+    finalPrice: "15000",
+    duration: "7 days",
+    expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // expires in 5 days
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    tool: mockTools[0] // NHẶT NGỌC HÀNG NGÀY
+  },
+  {
+    id: "purchase-2",
+    userId: "user-1", 
+    toolId: "3",
+    finalPrice: "50000",
+    duration: "30 days",
+    expiresAt: new Date(Date.now() + 24 * 24 * 60 * 60 * 1000), // expires in 24 days
+    createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+    tool: mockTools[2] // BOT BÁN ITEM
+  }
+];
 
 // Default credentials
 export const defaultCredentials = {

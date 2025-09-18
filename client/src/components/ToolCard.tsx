@@ -1,12 +1,20 @@
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Eye, Star } from "lucide-react";
-import type { Tool, Category } from "@shared/schema";
+import { Eye, ShoppingCart } from "lucide-react";
 
 interface ToolCardProps {
-  tool: Tool & { category?: Category };
+  tool: {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+    prices?: Array<{ duration: string; amount: string }>;
+    imageUrl?: string;
+    views: number;
+    purchases: number;
+    [key: string]: any;
+  };
   onPurchase?: (toolId: string) => void;
 }
 
@@ -17,63 +25,68 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1" data-testid={`card-tool-${tool.id}`}>
-      {/* Tool Image */}
-      <div className="relative">
-        <img 
-          src={tool.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"} 
-          alt={tool.name}
-          className="w-full h-48 object-cover"
-        />
-        {tool.category && (
-          <Badge className="absolute top-3 left-3" variant="secondary">
-            {tool.category.name}
-          </Badge>
-        )}
-        <div className="absolute top-3 right-3 flex items-center space-x-1 bg-black/50 text-white px-2 py-1 rounded-full text-xs">
-          <Eye className="w-3 h-3" />
-          <span data-testid={`text-tool-views-${tool.id}`}>{tool.views}</span>
+    <Card className="overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200" data-testid={`card-tool-${tool.id}`}>
+      {/* Tool Image - Orange Dragon Ball style */}
+      <div className="relative bg-gradient-to-br from-orange-400 to-orange-600 h-32 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl mb-2">🐉</div>
+          <div className="text-white font-bold text-xs bg-black/20 px-2 py-1 rounded">NGỌC RỒNG</div>
         </div>
       </div>
 
-      <CardContent className="p-6">
+      <CardContent className="p-4">
         <div className="space-y-3">
           {/* Tool Name */}
-          <h3 className="text-xl font-bold line-clamp-2" data-testid={`text-tool-name-${tool.id}`}>
+          <h3 className="font-bold text-sm text-center text-gray-800" data-testid={`text-tool-name-${tool.id}`}>
             {tool.name}
           </h3>
           
-          {/* Description */}
-          <p className="text-muted-foreground line-clamp-3" data-testid={`text-tool-description-${tool.id}`}>
-            {tool.description}
-          </p>
-          
-          {/* Price and Rating */}
-          <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold text-primary" data-testid={`text-tool-price-${tool.id}`}>
-              {Number(tool.price).toLocaleString('vi-VN')}₫
+          {/* Pricing Options */}
+          <div className="space-y-1">
+            {tool.prices?.map((priceOption, index) => (
+              <div key={index} className="flex justify-between items-center text-xs">
+                <span className="text-red-500 font-semibold">
+                  {Number(priceOption.amount).toLocaleString('vi-VN')} ₫
+                </span>
+                <span className="text-red-400">/ {priceOption.duration}</span>
+              </div>
+            ))}
+            {!tool.prices && (
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-red-500 font-semibold">
+                  {Number(tool.price).toLocaleString('vi-VN')} ₫
+                </span>
+                <span className="text-red-400">/ Vĩnh viễn</span>
+              </div>
+            )}
+          </div>
+
+          {/* Stats */}
+          <div className="flex justify-center items-center space-x-4 text-xs text-gray-500">
+            <div className="flex items-center space-x-1">
+              <Eye className="w-3 h-3" />
+              <span data-testid={`text-tool-views-${tool.id}`}>
+                Lượt xem: {tool.views?.toLocaleString('vi-VN') || 0}
+              </span>
             </div>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Star className="w-4 h-4 mr-1 text-yellow-500 fill-current" />
-              <span>{Number(tool.rating).toFixed(1)} ({tool.reviewCount} đánh giá)</span>
+            <div className="flex items-center space-x-1">
+              <ShoppingCart className="w-3 h-3" />
+              <span data-testid={`text-tool-purchases-${tool.id}`}>
+                Lượt mua: {tool.purchases?.toLocaleString('vi-VN') || 0}
+              </span>
             </div>
           </div>
           
-          {/* Actions */}
-          <div className="flex gap-2">
+          {/* View Details Button */}
+          <Link href={`/tools/${tool.id}`}>
             <Button 
-              className="flex-1" 
-              onClick={handlePurchase}
-              data-testid={`button-purchase-${tool.id}`}
+              variant="outline"
+              className="w-full text-blue-500 border-blue-300 hover:bg-blue-50 text-xs font-medium"
+              data-testid={`button-view-details-${tool.id}`}
             >
-              Mua ngay
+              XEM CHI TIẾT
             </Button>
-            <Link href={`/tools/${tool.id}`}>
-              <Button variant="outline" size="sm" data-testid={`button-view-details-${tool.id}`}>
-                <Eye className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
+          </Link>
         </div>
       </CardContent>
     </Card>

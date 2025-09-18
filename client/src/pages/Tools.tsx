@@ -61,12 +61,11 @@ export default function Tools() {
     });
   };
 
-  // Filter tools based on search and category
+  // Filter tools based on search only
   const filteredTools = tools.filter(tool => {
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || tool.categoryId === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   const handlePurchase = (toolId: string) => {
@@ -124,58 +123,23 @@ export default function Tools() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mb-8"
           >
-            <div className="flex flex-col md:flex-row gap-4 mb-6">
-              {/* Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Tìm kiếm công cụ..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                  data-testid="input-search-tools"
-                />
-              </div>
-              
-              {/* Category Filter */}
-              <div className="flex items-center space-x-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <div className="flex flex-wrap gap-2">
-                  <Badge
-                    variant={selectedCategory === "" ? "default" : "secondary"}
-                    className="cursor-pointer"
-                    onClick={() => setSelectedCategory("")}
-                    data-testid="filter-all-categories"
-                  >
-                    Tất cả
-                  </Badge>
-                  {categoriesLoading ? (
-                    [...Array(3)].map((_, i) => (
-                      <Skeleton key={i} className="h-6 w-16 rounded-full" />
-                    ))
-                  ) : (
-                    categories?.map((category) => (
-                      <Badge
-                        key={category.id}
-                        variant={selectedCategory === category.id ? "default" : "secondary"}
-                        className="cursor-pointer"
-                        onClick={() => setSelectedCategory(category.id)}
-                        data-testid={`filter-category-${category.slug}`}
-                      >
-                        {category.name}
-                      </Badge>
-                    ))
-                  )}
-                </div>
-              </div>
+            {/* Search */}
+            <div className="relative max-w-md mx-auto mb-6">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Tìm kiếm công cụ..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+                data-testid="input-search-tools"
+              />
             </div>
 
             {/* Results count */}
             {!toolsLoading && (
-              <p className="text-sm text-muted-foreground" data-testid="text-results-count">
+              <p className="text-sm text-muted-foreground text-center" data-testid="text-results-count">
                 Hiển thị {filteredTools.length} công cụ
                 {searchQuery && ` cho "${searchQuery}"`}
-                {selectedCategory && categories && ` trong danh mục "${categories.find(c => c.id === selectedCategory)?.name}"`}
               </p>
             )}
           </motion.div>
@@ -187,8 +151,8 @@ export default function Tools() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {toolsLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[...Array(6)].map((_, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[...Array(8)].map((_, i) => (
                   <Card key={i} className="overflow-hidden">
                     <Skeleton className="w-full h-48" />
                     <CardContent className="p-6">
@@ -210,7 +174,7 @@ export default function Tools() {
                 ))}
               </div>
             ) : filteredTools.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredTools.map((tool, index) => (
                   <motion.div
                     key={tool.id}
@@ -227,21 +191,18 @@ export default function Tools() {
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Không tìm thấy công cụ</h3>
                 <p className="text-muted-foreground">
-                  {searchQuery || selectedCategory
-                    ? "Thử thay đổi tiêu chí tìm kiếm hoặc bộ lọc của bạn"
+                  {searchQuery
+                    ? "Thử thay đổi từ khóa tìm kiếm"
                     : "Chưa có công cụ nào được thêm vào hệ thống"}
                 </p>
-                {(searchQuery || selectedCategory) && (
+                {searchQuery && (
                   <Button 
                     variant="outline" 
                     className="mt-4"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCategory("");
-                    }}
-                    data-testid="button-clear-filters"
+                    onClick={() => setSearchQuery("")}
+                    data-testid="button-clear-search"
                   >
-                    Xóa bộ lọc
+                    Xóa tìm kiếm
                   </Button>
                 )}
               </div>

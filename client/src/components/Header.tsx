@@ -84,6 +84,28 @@ export function Header() {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Contact Buttons */}
+            <div className="flex items-center space-x-2 ml-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open('https://zalo.me/phamgiang', '_blank')}
+                className="text-xs bg-blue-500 text-white border-blue-500 hover:bg-blue-600"
+                data-testid="button-contact-zalo"
+              >
+                Zalo
+              </Button>
+              <Button
+                variant="outline" 
+                size="sm"
+                onClick={() => window.open('https://t.me/phamgiang', '_blank')}
+                className="text-xs bg-blue-400 text-white border-blue-400 hover:bg-blue-500"
+                data-testid="button-contact-telegram"
+              >
+                Telegram
+              </Button>
+            </div>
           </nav>
 
           {/* Actions */}
@@ -125,18 +147,18 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full" data-testid="button-user-menu">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user?.profileImageUrl} alt="" />
+                      <AvatarImage src={(user as any)?.profileImageUrl} alt="" />
                       <AvatarFallback className="text-xs">
-                        {user?.firstName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U"}
+                        {(user as any)?.firstName?.[0]?.toUpperCase() || (user as any)?.email?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <div className="flex flex-col space-y-1 p-2">
-                    <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-                    <p className="text-xs text-muted-foreground">{user?.email}</p>
-                    {user?.isAdmin && (
+                    <p className="text-sm font-medium">{(user as any)?.firstName} {(user as any)?.lastName}</p>
+                    <p className="text-xs text-muted-foreground">{(user as any)?.email}</p>
+                    {(user as any)?.isAdmin && (
                       <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
                         Admin
                       </span>

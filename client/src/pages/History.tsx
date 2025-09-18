@@ -217,7 +217,7 @@ export default function History() {
                                   {payment.description || (payment.type === 'deposit' ? 'Nạp tiền' : 'Mua công cụ')}
                                 </p>
                                 <p className="text-sm text-muted-foreground" data-testid={`text-transaction-date-${payment.id}`}>
-                                  {new Date(payment.createdAt).toLocaleString('vi-VN')}
+                                  {payment.createdAt ? new Date(payment.createdAt).toLocaleString('vi-VN') : 'N/A'}
                                 </p>
                               </div>
                             </div>
@@ -291,7 +291,7 @@ export default function History() {
                                   {payment.description || 'Nạp tiền vào tài khoản'}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                  {new Date(payment.createdAt).toLocaleString('vi-VN')}
+                                  {payment.createdAt ? new Date(payment.createdAt).toLocaleString('vi-VN') : 'N/A'}
                                 </p>
                               </div>
                             </div>
@@ -365,7 +365,7 @@ export default function History() {
                                     {purchase.tool.name}
                                   </p>
                                   <p className="text-sm text-muted-foreground">
-                                    Mua ngày {new Date(purchase.createdAt).toLocaleString('vi-VN')}
+                                    Mua ngày {purchase.createdAt ? new Date(purchase.createdAt).toLocaleString('vi-VN') : 'N/A'}
                                   </p>
                                 </div>
                               </div>
