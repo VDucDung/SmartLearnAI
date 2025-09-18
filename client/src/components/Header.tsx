@@ -48,15 +48,14 @@ export function Header() {
 
   const navigation = [
     { name: "Trang chủ", href: "/" },
-    { name: "Công cụ", href: "/tools" },
     ...(isAuthenticated ? [{ name: "Dashboard", href: "/dashboard" }] : []),
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+        <div className="grid grid-cols-3 h-16 items-center">
+          {/* Logo - Left */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2" data-testid="link-logo">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -68,8 +67,8 @@ export function Header() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          {/* Desktop Navigation - Center */}
+          <nav className="hidden md:flex items-center justify-center space-x-6">
             {navigation.map((item) => (
               <Link
                 key={item.href}
@@ -84,32 +83,10 @@ export function Header() {
                 {item.name}
               </Link>
             ))}
-            
-            {/* Contact Buttons */}
-            <div className="flex items-center space-x-2 ml-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => window.open('https://zalo.me/phamgiang', '_blank')}
-                className="text-xs bg-blue-500 text-white border-blue-500 hover:bg-blue-600"
-                data-testid="button-contact-zalo"
-              >
-                Zalo
-              </Button>
-              <Button
-                variant="outline" 
-                size="sm"
-                onClick={() => window.open('https://t.me/phamgiang', '_blank')}
-                className="text-xs bg-blue-400 text-white border-blue-400 hover:bg-blue-500"
-                data-testid="button-contact-telegram"
-              >
-                Telegram
-              </Button>
-            </div>
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center space-x-4">
+          {/* Actions - Right */}
+          <div className="flex items-center justify-end space-x-4">
             {/* Theme Toggle */}
             <Button
               variant="ghost"
@@ -130,7 +107,7 @@ export function Header() {
                     size="sm"
                     data-testid="button-login"
                   >
-                    Đăng nhập Demo
+                    Đăng nhập
                   </Button>
                 </Link>
                 <Link href="/login">
@@ -138,7 +115,7 @@ export function Header() {
                     size="sm"
                     data-testid="button-register"
                   >
-                    Dùng thử Demo
+                    Đăng ký
                   </Button>
                 </Link>
               </div>

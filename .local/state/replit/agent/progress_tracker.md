@@ -4,4 +4,5 @@
 [x] 4. Remove payment features and implement mock data
 [x] 5. Add default authentication with demo credentials
 [x] 6. Update homepage to display tools directly with "TOOL NRO" title
-[x] 7. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
+[x] 7. Simplify navigation to keep only "Trang chủ" homepage as requested
+[x] 8. Inform user the import is completed and they can start building, mark the import as completed using the complete_project_import tool
