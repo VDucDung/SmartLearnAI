@@ -183,7 +183,7 @@ export default function ToolDetails() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Back Button */}
           <motion.div
@@ -199,148 +199,171 @@ export default function ToolDetails() {
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Tool Info Section - Left Side */}
             <motion.div
-              className="lg:col-span-2"
+              className="lg:col-span-3"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              {/* Tool Image/Video */}
-              <div className="relative mb-6">
-                <img 
-                  src={tool.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"} 
-                  alt={tool.name}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-                {tool.category && (
-                  <Badge className="absolute top-4 left-4" variant="secondary">
-                    {tool.category.name}
-                  </Badge>
-                )}
-                <div className="absolute top-4 right-4 flex items-center space-x-1 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                  <Eye className="w-4 h-4" />
-                  <span data-testid="text-tool-views">{tool.views} lượt xem</span>
-                </div>
-              </div>
-
-              {/* Tool Info */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-4" data-testid="text-tool-name">{tool.name}</h1>
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Star className="w-4 h-4 mr-1 text-yellow-500 fill-current" />
-                    <span>{Number(tool.rating).toFixed(1)} ({tool.reviewCount} đánh giá)</span>
+              <Card className="overflow-hidden shadow-lg">
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  {/* Tool Banner Image */}
+                  <div className="relative bg-gradient-to-br from-orange-400 to-orange-600 h-48 md:h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">🐉</div>
+                      <div className="text-white font-bold text-sm bg-black/20 px-3 py-1 rounded-full">NGỌC RỒNG ONLINE</div>
+                      <div className="text-white text-xs mt-2 opacity-80">.com</div>
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-primary" data-testid="text-tool-price">
-                    {Number(tool.price).toLocaleString('vi-VN')}₫
+
+                  {/* Tool Details */}
+                  <div className="p-6">
+                    <h1 className="text-2xl font-bold mb-2" data-testid="text-tool-name">
+                      {tool.name}
+                    </h1>
+                    
+                    <div className="text-sm text-gray-600 mb-6">
+                      Người bán: <span className="text-blue-600 font-medium">phamgiang</span>
+                    </div>
+
+                    {/* Pricing Options */}
+                    <div className="space-y-3">
+                      {(tool.prices && tool.prices.length > 0) ? tool.prices.map((priceOption: any, index: number) => (
+                        <Button
+                          key={index}
+                          variant="outline"
+                          className="w-full h-12 justify-between bg-gray-800 text-white hover:bg-gray-700 border-gray-700"
+                          onClick={() => handlePurchase()}
+                          data-testid={`button-purchase-${priceOption.duration.replace(' ', '-').toLowerCase()}`}
+                        >
+                          <span>Mua {priceOption.duration}</span>
+                          <span className="font-bold">
+                            {Number(priceOption.amount).toLocaleString('vi-VN')}₫
+                          </span>
+                        </Button>
+                      )) : (
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 justify-between bg-gray-800 text-white hover:bg-gray-700 border-gray-700"
+                          onClick={() => handlePurchase()}
+                          data-testid="button-purchase-permanent"
+                        >
+                          <span>Mua Vĩnh Viễn</span>
+                          <span className="font-bold">
+                            {Number(tool.price).toLocaleString('vi-VN')}₫
+                          </span>
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <p className="text-muted-foreground text-lg leading-relaxed" data-testid="text-tool-description">
-                  {tool.description}
-                </p>
-              </div>
+              </Card>
 
-              {/* Video Demo */}
-              {tool.videoUrl && (
-                <Card className="mb-8">
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Play className="mr-2 h-5 w-5" />
-                      Video Demo
+              {/* Product Information Section */}
+              <div className="mt-8">
+                <Card>
+                  <CardHeader className="border-b">
+                    <CardTitle className="text-lg">
+                      THÔNG TIN SẢN PHẨM [Version 1.1.7 - {new Date().toLocaleDateString('vi-VN')} ]
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                      <div className="text-center">
-                        <Play className="w-12 h-12 mx-auto mb-2 text-muted-foreground" />
-                        <p className="text-muted-foreground">Video demo sẽ được hiển thị tại đây</p>
-                        <a href={tool.videoUrl} target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" className="mt-4" data-testid="button-watch-video">
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Xem video
-                          </Button>
-                        </a>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Eye className="w-4 h-4 mr-1" />
+                          <span data-testid="text-tool-views">{(tool.views || 0).toLocaleString('vi-VN')} lượt xem</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <ShoppingCart className="w-4 h-4 mr-1" />
+                          <span>{(tool.purchases || 0).toLocaleString('vi-VN')} lượt mua</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Star className="w-4 h-4 mr-1 text-yellow-500 fill-current" />
+                          <span>{Number(tool.rating).toFixed(1)} ({tool.reviewCount} đánh giá)</span>
+                        </div>
                       </div>
+                      
+                      <Separator />
+                      
+                      <div>
+                        <h3 className="font-semibold mb-2">Mô tả sản phẩm:</h3>
+                        <p className="text-gray-700 leading-relaxed" data-testid="text-tool-description">
+                          {tool.description}
+                        </p>
+                      </div>
+                      
+                      {tool.instructions && (
+                        <div>
+                          <h3 className="font-semibold mb-2">Hướng dẫn sử dụng:</h3>
+                          <div className="bg-gray-50 p-4 rounded-lg" data-testid="content-tool-instructions">
+                            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700">
+                              {tool.instructions}
+                            </pre>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
-              )}
-
-              {/* Instructions */}
-              {tool.instructions && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Hướng dẫn sử dụng</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="prose prose-sm max-w-none dark:prose-invert" data-testid="content-tool-instructions">
-                      {/* Simplified markdown rendering */}
-                      <div dangerouslySetInnerHTML={{ 
-                        __html: tool.instructions
-                          .replace(/### (.*)/g, '<h4>$1</h4>')
-                          .replace(/## (.*)/g, '<h3>$1</h3>')
-                          .replace(/# (.*)/g, '<h2>$1</h2>')
-                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                          .replace(/\n/g, '<br/>')
-                      }} />
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              </div>
             </motion.div>
 
-            {/* Sidebar */}
+            {/* Purchase Information Sidebar */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="sticky top-24">
+              <Card className="sticky top-24 bg-gray-50">
                 <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-primary mb-6" data-testid="text-sidebar-price">
-                    {Number(tool.price).toLocaleString('vi-VN')}₫
-                  </div>
-                  
-                  <Button 
-                    className="w-full mb-4" 
-                    onClick={handlePurchase}
-                    data-testid="button-purchase-tool"
-                  >
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Mua ngay
-                  </Button>
-
-                  {tool.downloadUrl && (
-                    <Button variant="outline" className="w-full mb-6" asChild data-testid="button-preview-download">
-                      <a href={tool.downloadUrl} target="_blank" rel="noopener noreferrer">
-                        <Download className="mr-2 h-4 w-4" />
-                        Xem trước
-                      </a>
-                    </Button>
-                  )}
-
-                  <Separator className="mb-6" />
-
-                  {/* Contact Options */}
-                  <div>
-                    <h3 className="font-semibold mb-4">Liên hệ hỗ trợ</h3>
-                    <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start" data-testid="button-contact-telegram">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Telegram
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" data-testid="button-contact-zalo">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Zalo
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start" data-testid="button-contact-email">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Email
-                      </Button>
+                  <div className="space-y-4">
+                    <div className="bg-white p-4 rounded-lg border">
+                      <h3 className="font-semibold mb-2 text-gray-800">Bạn có thể thanh toán sản phẩm vào giỏ</h3>
+                      <p className="text-sm text-gray-600">Thanh toán một lúc</p>
                     </div>
+                    
+                    <div className="bg-white p-4 rounded-lg border">
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        <strong>Nếu có lỗi xảy ra hãy liên hệ với admin</strong><br/>
+                        Phương pháp liên hệ ở trang chủ
+                      </p>
+                    </div>
+                    
+                    <Separator />
+                    
+                    {/* Contact Options */}
+                    <div>
+                      <h3 className="font-semibold mb-3">Liên hệ hỗ trợ</h3>
+                      <div className="space-y-2">
+                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-telegram">
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Telegram
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-zalo">
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Zalo
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-email">
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          Email
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {tool.downloadUrl && (
+                      <div>
+                        <Button variant="outline" className="w-full" asChild data-testid="button-preview-download">
+                          <a href={tool.downloadUrl} target="_blank" rel="noopener noreferrer">
+                            <Download className="mr-2 h-4 w-4" />
+                            Xem trước / Demo
+                          </a>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>

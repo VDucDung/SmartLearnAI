@@ -2,6 +2,20 @@
 
 This is a full-stack web application built as a Vietnamese tool marketplace platform where users can browse, purchase, and manage digital tools. The application features a modern React frontend with a Node.js/Express backend, using PostgreSQL for data persistence. The platform includes user authentication, payment processing, admin management capabilities, and a comprehensive tool catalog system.
 
+## Demo Login Credentials
+
+The application provides the following demo accounts for testing:
+
+### User Account
+- **Tài khoản**: `demo`
+- **Mật khẩu**: `demo123`
+- Role: Regular user with access to tools and user features
+
+### Admin Account  
+- **Tài khoản**: `admin`
+- **Mật khẩu**: `admin123`
+- Role: Administrator with full access to admin panel and user management
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.

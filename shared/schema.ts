@@ -52,6 +52,8 @@ export const tools = pgTable("tools", {
   name: varchar("name").notNull(),
   description: text("description").notNull(),
   price: decimal("price", { precision: 10, scale: 0 }).notNull(),
+  prices: jsonb("prices"), // Array of pricing options with duration and amount
+  purchases: integer("purchases").default(0), // Total number of purchases
   categoryId: varchar("category_id").references(() => categories.id),
   imageUrl: varchar("image_url"),
   videoUrl: varchar("video_url"),

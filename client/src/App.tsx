@@ -18,6 +18,7 @@ import History from "@/pages/History";
 import AdminPanel from "@/pages/AdminPanel";
 import Checkout from "@/pages/Checkout";
 import Login from "@/pages/Login";
+import Register from "@/pages/Register";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -25,6 +26,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
       {isLoading || !isAuthenticated ? (
         <>
           <Route path="/" component={Tools} />

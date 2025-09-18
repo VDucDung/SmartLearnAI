@@ -1,11 +1,11 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Layout } from "@/components/Layout";
-import { LoginForm } from "@/components/LoginForm";
+import { RegisterForm } from "@/components/RegisterForm";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
 
-export default function Login() {
+export default function Register() {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
@@ -18,7 +18,7 @@ export default function Login() {
 
   // Set page title
   useEffect(() => {
-    document.title = "Đăng nhập | TOOL NRO";
+    document.title = "Đăng ký | TOOL NRO";
   }, []);
 
   return (
@@ -28,9 +28,9 @@ export default function Login() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
+          className="w-full max-w-5xl"
         >
-          <LoginForm />
+          <RegisterForm />
         </motion.div>
       </div>
     </Layout>
