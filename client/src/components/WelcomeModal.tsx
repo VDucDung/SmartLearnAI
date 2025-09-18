@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import {
   Dialog,
   DialogContent,
@@ -22,18 +23,36 @@ import {
 
 export function WelcomeModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
-    // Show modal after a short delay for better UX on every page load/reload
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 500);
+    // For page reload: Clear any previous dismissal state and always show modal
+    const isPageReload = !document.referrer || document.referrer === window.location.href;
     
-    return () => clearTimeout(timer);
-  }, []);
+    if (isPageReload) {
+      // Clear previous session data on page reload
+      sessionStorage.removeItem('welcome-modal-dismissed-session');
+    }
+    
+    // Check if modal was dismissed in current session (only for navigation, not reload)
+    const modalDismissedKey = 'welcome-modal-dismissed-session';
+    const wasDismissed = sessionStorage.getItem(modalDismissedKey);
+    
+    // Show modal if not dismissed or if it's a page reload
+    if (!wasDismissed || isPageReload) {
+      // Show modal after a short delay for better UX
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location]); // Re-run when location changes
 
   const handleClose = () => {
     setIsOpen(false);
+    // Mark modal as dismissed in current session
+    sessionStorage.setItem('welcome-modal-dismissed-session', 'true');
   };
 
   return (
@@ -78,7 +97,7 @@ export function WelcomeModal() {
               SHOP TOOL/VPS NGỌC RỒNG ONLINE
             </h2>
             <Badge variant="secondary" className="bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700">
-              PhamGiang.net
+              LinhCong.net
             </Badge>
           </div>
 
@@ -134,11 +153,11 @@ export function WelcomeModal() {
                 variant="outline"
                 size="sm"
                 className="w-full justify-center gap-2 h-auto py-3 text-blue-600 border-blue-200 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-700 dark:hover:bg-blue-900/20"
-                onClick={() => window.open('https://api.phamgiang.net', '_blank', 'noopener,noreferrer')}
+                onClick={() => window.open('https://api.linhcong.net', '_blank', 'noopener,noreferrer')}
                 data-testid="link-website"
               >
                 <ExternalLink className="h-4 w-4" />
-                api.phamgiang.net
+                api.linhcong.net
               </Button>
 
               <Button

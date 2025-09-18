@@ -226,12 +226,12 @@ export default function ToolDetails() {
                     </h1>
                     
                     <div className="text-sm text-gray-600 mb-6">
-                      Người bán: <span className="text-blue-600 font-medium">phamgiang</span>
+                      Người bán: <span className="text-blue-600 font-medium">linhcong</span>
                     </div>
 
                     {/* Pricing Options */}
                     <div className="space-y-3">
-                      {(tool.prices && tool.prices.length > 0) ? tool.prices.map((priceOption: any, index: number) => (
+                      {(tool.prices && Array.isArray(tool.prices) && tool.prices.length > 0) ? tool.prices.map((priceOption: any, index: number) => (
                         <Button
                           key={index}
                           variant="outline"
@@ -295,6 +295,38 @@ export default function ToolDetails() {
                           {tool.description}
                         </p>
                       </div>
+
+                      {/* Media Section - Images and Videos */}
+                      {(tool.imageUrl || tool.videoUrl) && (
+                        <div>
+                          <h3 className="font-semibold mb-3">Hình ảnh demo</h3>
+                          <div className="space-y-4">
+                            {tool.imageUrl && (
+                              <div className="border rounded-lg overflow-hidden bg-gray-50">
+                                <img 
+                                  src={tool.imageUrl} 
+                                  alt={`Demo ${tool.name}`}
+                                  className="w-full h-auto max-h-96 object-contain"
+                                  data-testid="img-tool-demo"
+                                />
+                              </div>
+                            )}
+                            
+                            {tool.videoUrl && (
+                              <div className="border rounded-lg overflow-hidden bg-gray-50">
+                                <video 
+                                  controls 
+                                  className="w-full h-auto max-h-96"
+                                  data-testid="video-tool-demo"
+                                >
+                                  <source src={tool.videoUrl} type="video/mp4" />
+                                  Trình duyệt của bạn không hỗ trợ video.
+                                </video>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                       
                       {tool.instructions && (
                         <div>
@@ -333,37 +365,6 @@ export default function ToolDetails() {
                       </p>
                     </div>
                     
-                    <Separator />
-                    
-                    {/* Contact Options */}
-                    <div>
-                      <h3 className="font-semibold mb-3">Liên hệ hỗ trợ</h3>
-                      <div className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-telegram">
-                          <MessageCircle className="mr-2 h-4 w-4" />
-                          Telegram
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-zalo">
-                          <MessageCircle className="mr-2 h-4 w-4" />
-                          Zalo
-                        </Button>
-                        <Button variant="outline" className="w-full justify-start text-sm" data-testid="button-contact-email">
-                          <MessageCircle className="mr-2 h-4 w-4" />
-                          Email
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    {tool.downloadUrl && (
-                      <div>
-                        <Button variant="outline" className="w-full" asChild data-testid="button-preview-download">
-                          <a href={tool.downloadUrl} target="_blank" rel="noopener noreferrer">
-                            <Download className="mr-2 h-4 w-4" />
-                            Xem trước / Demo
-                          </a>
-                        </Button>
-                      </div>
-                    )}
                   </div>
                 </CardContent>
               </Card>

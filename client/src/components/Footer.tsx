@@ -5,7 +5,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column */}
           <div>
-            <h3 className="text-xl font-bold mb-4">PHAMGIANG.NET</h3>
+            <h3 className="text-xl font-bold mb-4">LINHCONG.NET</h3>
             <p className="text-gray-300 mb-2">Hệ thống ban tool - vps - captcha giá rẻ</p>
             <p className="text-gray-300">Đảm bảo uy tín và chất lượng</p>
           </div>
@@ -20,13 +20,13 @@ export function Footer() {
             {/* Contact Buttons */}
             <div className="flex space-x-2 mt-4">
               <button
-                onClick={() => window.open('https://zalo.me/phamgiang', '_blank')}
+                onClick={() => window.open('https://zalo.me/linhcong', '_blank')}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
               >
                 Liên hệ Zalo
               </button>
               <button
-                onClick={() => window.open('https://t.me/phamgiang', '_blank')}
+                onClick={() => window.open('https://t.me/linhcong', '_blank')}
                 className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
               >
                 Liên hệ Telegram
@@ -38,7 +38,7 @@ export function Footer() {
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-6 text-center">
           <p className="text-gray-400 text-sm italic">
-            Copyright © 2022 CAPTCHA - DEV BY Mr.DUY
+            Copyright © 2022 CAPTCHA - DEV BY Mr.DUNG
           </p>
         </div>
       </div>

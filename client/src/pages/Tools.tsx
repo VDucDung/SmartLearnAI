@@ -92,56 +92,90 @@ export default function Tools() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <section className="py-12 bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700">
+        {/* Enhanced Header */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-center"
+              className="space-y-6"
             >
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Thị trường{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 mb-6">
+                <ShoppingCart className="w-10 h-10 text-white" />
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
+                <span className="text-gray-900 dark:text-white">Thị trường </span>
+                <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   công cụ
                 </span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 Khám phá bộ sưu tập công cụ chuyên nghiệp được tuyển chọn kỹ lưỡng
               </p>
+              
+              <div className="flex flex-wrap justify-center gap-4 mt-8">
+                <div className="flex items-center space-x-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 rounded-full border border-cyan-200 dark:border-cyan-800">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {filteredTools.length} công cụ có sẵn
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2 px-4 py-2 bg-white/80 dark:bg-gray-800/80 rounded-full border border-cyan-200 dark:border-cyan-800">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    Chất lượng cao
+                  </span>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Search and Filters */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Enhanced Search Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-8"
+            className="mb-12"
           >
-            {/* Search */}
-            <div className="relative max-w-md mx-auto mb-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Tìm kiếm công cụ..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                data-testid="input-search-tools"
-              />
-            </div>
+            <div className="max-w-2xl mx-auto">
+              {/* Search */}
+              <div className="relative mb-8">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </div>
+                <Input
+                  placeholder="Tìm kiếm công cụ chuyên nghiệp..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-4 py-4 text-lg bg-white/90 dark:bg-gray-800/90 border-2 border-cyan-200 dark:border-cyan-800 rounded-2xl focus:border-cyan-500 dark:focus:border-cyan-400 shadow-lg backdrop-blur-sm transition-all duration-300"
+                  data-testid="input-search-tools"
+                />
+              </div>
 
-            {/* Results count */}
-            {!toolsLoading && (
-              <p className="text-sm text-muted-foreground text-center" data-testid="text-results-count">
-                Hiển thị {filteredTools.length} công cụ
-                {searchQuery && ` cho "${searchQuery}"`}
-              </p>
-            )}
+              {/* Results count */}
+              {!toolsLoading && (
+                <div className="text-center">
+                  <p className="text-gray-600 dark:text-gray-300" data-testid="text-results-count">
+                    {searchQuery ? (
+                      <>
+                        Tìm thấy <span className="font-semibold text-cyan-600 dark:text-cyan-400">{filteredTools.length}</span> kết quả cho 
+                        <span className="font-semibold"> "{searchQuery}"</span>
+                      </>
+                    ) : (
+                      <>
+                        Hiển thị <span className="font-semibold text-cyan-600 dark:text-cyan-400">{filteredTools.length}</span> công cụ chuyên nghiệp
+                      </>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
           </motion.div>
 
           {/* Tools Grid */}
@@ -174,37 +208,50 @@ export default function Tools() {
                 ))}
               </div>
             ) : filteredTools.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {filteredTools.map((tool, index) => (
                   <motion.div
                     key={tool.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.1 * index }}
+                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ 
+                      duration: 0.6, 
+                      delay: 0.1 * index,
+                      type: "spring",
+                      stiffness: 100 
+                    }}
+                    className="group"
                   >
-                    <ToolCard tool={tool} onPurchase={handlePurchase} />
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-cyan-200/50 dark:border-cyan-800/50 shadow-lg hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 group-hover:scale-105 group-hover:bg-white dark:group-hover:bg-gray-800">
+                      <ToolCard tool={tool} onPurchase={handlePurchase} />
+                    </div>
                   </motion.div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Không tìm thấy công cụ</h3>
-                <p className="text-muted-foreground">
-                  {searchQuery
-                    ? "Thử thay đổi từ khóa tìm kiếm"
-                    : "Chưa có công cụ nào được thêm vào hệ thống"}
-                </p>
-                {searchQuery && (
-                  <Button 
-                    variant="outline" 
-                    className="mt-4"
-                    onClick={() => setSearchQuery("")}
-                    data-testid="button-clear-search"
-                  >
-                    Xóa tìm kiếm
-                  </Button>
-                )}
+              <div className="text-center py-20">
+                <div className="max-w-md mx-auto">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-cyan-100 to-blue-100 dark:from-cyan-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center">
+                    <AlertCircle className="h-12 w-12 text-cyan-600 dark:text-cyan-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                    Không tìm thấy công cụ
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    {searchQuery
+                      ? `Không có công cụ nào phù hợp với "${searchQuery}". Hãy thử từ khóa khác.`
+                      : "Chưa có công cụ nào được thêm vào hệ thống. Vui lòng quay lại sau."}
+                  </p>
+                  {searchQuery && (
+                    <Button 
+                      onClick={() => setSearchQuery("")}
+                      className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                      data-testid="button-clear-search"
+                    >
+                      Xóa tìm kiếm
+                    </Button>
+                  )}
+                </div>
               </div>
             )}
           </motion.div>

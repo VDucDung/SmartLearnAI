@@ -27,18 +27,17 @@ function Router() {
     <Switch>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/" component={Tools} />
+      <Route path="/tools" component={Tools} />
+      <Route path="/tools/:id" component={ToolDetails} />
+      
       {isLoading || !isAuthenticated ? (
         <>
-          <Route path="/" component={Tools} />
-          <Route path="/tools" component={Tools} />
           <Route path="/landing" component={Landing} />
         </>
       ) : (
         <>
-          <Route path="/" component={Tools} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/tools" component={Tools} />
-          <Route path="/tools/:id" component={ToolDetails} />
           <Route path="/purchased-tools" component={PurchasedTools} />
           <Route path="/deposit" component={Deposit} />
           <Route path="/history" component={History} />
