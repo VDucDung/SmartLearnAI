@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { Moon, Sun, Menu, User, Send, Wrench, Server, LogOut, ShoppingCart, BarChart3 } from "lucide-react";
+import { Moon, Sun, Menu, User, Send, Wrench, Server, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -99,20 +99,6 @@ export function Header() {
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
 
-            {/* Shopping Cart - Only show when authenticated */}
-            {isAuthenticated && (
-              <Link href="/cart">
-                <Button variant="ghost" size="sm" className="relative" data-testid="button-cart">
-                  <ShoppingCart className="h-4 w-4" />
-                  <Badge 
-                    variant="destructive" 
-                    className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                  >
-                    0
-                  </Badge>
-                </Button>
-              </Link>
-            )}
 
             {/* Auth Buttons */}
             {!isAuthenticated ? (
@@ -174,12 +160,6 @@ export function Header() {
                     <Link href="/purchased-tools" className="flex items-center">
                       <Wrench className="mr-2 h-4 w-4 text-orange-500" />
                       <span>Quản Lý Tool</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/statistics" className="flex items-center">
-                      <BarChart3 className="mr-2 h-4 w-4 text-indigo-500" />
-                      <span>Thống kê</span>
                     </Link>
                   </DropdownMenuItem>
                   {(user as any)?.isAdmin && (

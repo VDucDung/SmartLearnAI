@@ -53,7 +53,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Ensure demo user exists in storage for backend compatibility
       try {
         await storage.upsertUser({
-          id: user.id,
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -368,7 +367,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Check usage limit
-      if (discountCode.usageLimit && discountCode.usageCount >= discountCode.usageLimit) {
+      if (discountCode.usageLimit && (discountCode.usageCount || 0) >= discountCode.usageLimit) {
         return res.status(400).json({ message: "Discount code usage limit exceeded" });
       }
 
@@ -445,8 +444,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.logKeyValidation({
           keyValue: '',
           isValid: false,
-          ipAddress,
-          userAgent,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
         });
         return res.json({ valid: false });
       }
@@ -457,8 +456,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.logKeyValidation({
           keyValue: key,
           isValid: false,
-          ipAddress,
-          userAgent,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
         });
         return res.json({ valid: false });
       }
@@ -469,8 +468,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: purchase.user.id,
         toolId: purchase.tool.id,
         isValid: true,
-        ipAddress,
-        userAgent,
+        ipAddress: ipAddress || null,
+        userAgent: userAgent || null,
       });
 
       res.json({

@@ -260,34 +260,34 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 * index }}
                   >
-                    <Card className="overflow-hidden border-2 hover:border-purple-200 transition-all duration-300 hover:shadow-lg">
+                    <Card className="overflow-hidden border-2 hover:border-purple-200 dark:hover:border-purple-700 transition-all duration-300 hover:shadow-lg">
                       <CardContent className="p-6">
                         <div className="text-center mb-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                            <Server className="w-8 h-8 text-blue-600" />
+                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-800 dark:to-purple-800 rounded-lg flex items-center justify-center mx-auto mb-3">
+                            <Server className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                           </div>
-                          <h3 className="font-bold text-lg mb-2">{vps.name}</h3>
+                          <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{vps.name}</h3>
                           <p className="text-2xl font-bold text-red-500 mb-1">
                             {Number(vps.price).toLocaleString('vi-VN')} ₫
-                            <span className="text-sm font-normal text-gray-500"> / {vps.duration}</span>
+                            <span className="text-sm font-normal text-gray-500 dark:text-gray-400"> / {vps.duration}</span>
                           </p>
                         </div>
                         
                         <div className="space-y-3 mb-4">
-                          <div className="flex items-center justify-center space-x-2 text-blue-600">
+                          <div className="flex items-center justify-center space-x-2 text-blue-600 dark:text-blue-400">
                             <Cpu className="w-4 h-4" />
                             <span className="font-medium">{vps.specs.cores}</span>
                           </div>
-                          <div className="flex items-center justify-center space-x-2 text-blue-600">
+                          <div className="flex items-center justify-center space-x-2 text-blue-600 dark:text-blue-400">
                             <HardDrive className="w-4 h-4" />
                             <span className="font-medium">{vps.specs.ram}</span>
                           </div>
-                          <div className="text-center text-sm text-blue-600 font-medium">
+                          <div className="text-center text-sm text-blue-600 dark:text-blue-400 font-medium">
                             {vps.specs.feature}
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-center space-x-4 text-sm text-gray-600 mb-4">
+                        <div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
                           <div className="flex items-center space-x-1">
                             <Eye className="w-4 h-4" />
                             <span>Còn lại: {vps.availability.inStock}</span>
@@ -329,6 +329,115 @@ export default function Home() {
                 </p>
               </div>
             )}
+          </motion.div>
+
+          {/* Statistics Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="mt-16 mb-12"
+          >
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+                  THỐNG KÊ
+                </span>
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-emerald-600 to-cyan-600 mx-auto rounded-full"></div>
+            </div>
+            
+            {/* Statistics Content */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Top Nạp */}
+              <Card className="shadow-lg">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center py-3 rounded-t-lg">
+                  <h3 className="text-lg font-bold">TOP NẠP</h3>
+                </div>
+                <CardContent className="p-0">
+                  <div className="space-y-0">
+                    {[
+                      { rank: 1, username: "tung***", amount: "14.465.000" },
+                      { rank: 2, username: "appu***", amount: "8.575.000" },
+                      { rank: 3, username: "szhi***", amount: "6.380.000" },
+                      { rank: 4, username: "tiep***", amount: "6.112.950" },
+                      { rank: 5, username: "keyf***", amount: "6.000.000" },
+                      { rank: 6, username: "gian***", amount: "5.834.000" },
+                      { rank: 7, username: "stya***", amount: "5.349.000" },
+                      { rank: 8, username: "minh***", amount: "4.290.000" },
+                      { rank: 9, username: "taip***", amount: "3.901.000" },
+                      { rank: 10, username: "Duck***", amount: "3.600.000" },
+                    ].map((user) => (
+                      <div
+                        key={user.rank}
+                        className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <Badge 
+                            variant={user.rank <= 3 ? "destructive" : "secondary"}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                          >
+                            {user.rank}
+                          </Badge>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            {user.username}
+                          </span>
+                        </div>
+                        <span className="bg-emerald-500 text-white px-3 py-1 rounded text-sm font-bold">
+                          {user.amount}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Lịch Sử Giao Dịch */}
+              <Card className="shadow-lg">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-center py-3 rounded-t-lg">
+                  <h3 className="text-lg font-bold">LỊCH SỬ GIAO DỊCH</h3>
+                </div>
+                <CardContent className="p-0">
+                  <div className="space-y-0">
+                    {[
+                      { username: "buia***", product: "MUA (Tool Up Capsule Kỉ B)", time: "2025-09-19 12:40:11" },
+                      { username: "gian***", product: "MUA (Auto Bán Đồ Kho Báu)", time: "2025-09-18 19:41:34" },
+                      { username: "Nguy***", product: "MUA (Nhặt Thưởng Ngọc Rồng Đen)", time: "2025-09-17 20:56:32" },
+                      { username: "bach***", product: "MUA (Tự Động Đánh Quái)", time: "2025-09-17 12:50:43" },
+                      { username: "hibo***", product: "MUA (Tool Up Capsule Kỉ B)", time: "2025-09-17 12:21:59" },
+                      { username: "minh***", product: "MUA (Bot Bán Item)", time: "2025-09-17 07:00:53" },
+                      { username: "cayz***", product: "MUA (Tool Auto Up Đệ Ver1)", time: "2025-09-16 23:27:24" },
+                      { username: "0337***", product: "MUA (Nhặt Thưởng Ngọc Rồng Đen)", time: "2025-09-16 18:51:49" },
+                      { username: "ninh***", product: "MUA (Tự Động Đánh Quái)", time: "2025-09-15 17:00:53" },
+                      { username: "that***", product: "MUA (Tự Động Đánh Quái)", time: "2025-09-15 10:51:47" },
+                    ].map((transaction, index) => (
+                      <div
+                        key={index}
+                        className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <span className="text-red-500 font-bold text-sm">
+                                {transaction.username}
+                              </span>
+                            </div>
+                            <p className="text-gray-700 dark:text-gray-300 text-sm">
+                              {transaction.product}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-gray-500 text-xs">
+                              {transaction.time}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         </div>
 

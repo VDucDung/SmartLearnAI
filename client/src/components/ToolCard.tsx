@@ -25,7 +25,7 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200" data-testid={`card-tool-${tool.id}`}>
+    <Card className="overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-gray-700" data-testid={`card-tool-${tool.id}`}>
       {/* Tool Image - Orange Dragon Ball style */}
       <div className="relative bg-gradient-to-br from-orange-400 to-orange-600 h-32 flex items-center justify-center">
         <div className="text-center">
@@ -37,7 +37,7 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
       <CardContent className="p-4">
         <div className="space-y-3">
           {/* Tool Name */}
-          <h3 className="font-bold text-sm text-center text-gray-800" data-testid={`text-tool-name-${tool.id}`}>
+          <h3 className="font-bold text-sm text-center text-gray-800 dark:text-white" data-testid={`text-tool-name-${tool.id}`}>
             {tool.name}
           </h3>
           
@@ -48,7 +48,7 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
                 <span className="text-red-500 font-semibold">
                   {Number(priceOption.amount).toLocaleString('vi-VN')} ₫
                 </span>
-                <span className="text-red-400">/ {priceOption.duration}</span>
+                <span className="text-red-400 dark:text-red-300">/ {priceOption.duration}</span>
               </div>
             ))}
             {!tool.prices && (
@@ -56,13 +56,13 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
                 <span className="text-red-500 font-semibold">
                   {Number(tool.price).toLocaleString('vi-VN')} ₫
                 </span>
-                <span className="text-red-400">/ Vĩnh viễn</span>
+                <span className="text-red-400 dark:text-red-300">/ Vĩnh viễn</span>
               </div>
             )}
           </div>
 
           {/* Stats */}
-          <div className="flex justify-center items-center space-x-4 text-xs text-gray-500">
+          <div className="flex justify-center items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center space-x-1">
               <Eye className="w-3 h-3" />
               <span data-testid={`text-tool-views-${tool.id}`}>
@@ -81,7 +81,7 @@ export function ToolCard({ tool, onPurchase }: ToolCardProps) {
           <Link href={`/tools/${tool.id}`}>
             <Button 
               variant="outline"
-              className="w-full text-blue-500 border-blue-300 hover:bg-blue-50 text-xs font-medium"
+              className="w-full text-blue-500 dark:text-blue-400 border-blue-300 dark:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 text-xs font-medium"
               data-testid={`button-view-details-${tool.id}`}
             >
               XEM CHI TIẾT
