@@ -17,6 +17,8 @@ import Deposit from "@/pages/Deposit";
 import History from "@/pages/History";
 import AdminPanel from "@/pages/AdminPanel";
 import Checkout from "@/pages/Checkout";
+import Cart from "@/pages/Cart";
+import Statistics from "@/pages/Statistics";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 
@@ -30,6 +32,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/tools" component={Tools} />
       <Route path="/tools/:id" component={ToolDetails} />
+      <Route path="/cart" component={Cart} />
+      <Route path="/statistics" component={Statistics} />
       
       {isLoading || !isAuthenticated ? (
         <>

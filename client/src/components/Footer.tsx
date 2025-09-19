@@ -1,3 +1,5 @@
+import { FaFacebook, FaTelegram, FaPhone } from 'react-icons/fa';
+
 export function Footer() {
   return (
     <footer className="bg-slate-800 text-white py-8">
@@ -21,15 +23,24 @@ export function Footer() {
             <div className="flex space-x-2 mt-4">
               <button
                 onClick={() => window.open('https://zalo.me/linhcong', '_blank')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full text-lg transition-colors"
+                title="Liên hệ Zalo"
               >
-                Liên hệ Zalo
+                <FaPhone />
               </button>
               <button
                 onClick={() => window.open('https://t.me/linhcong', '_blank')}
-                className="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                className="bg-blue-400 hover:bg-blue-500 text-white p-3 rounded-full text-lg transition-colors"
+                title="Liên hệ Telegram"
               >
-                Liên hệ Telegram
+                <FaTelegram />
+              </button>
+              <button
+                onClick={() => window.open('https://facebook.com/linhcong', '_blank')}
+                className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full text-lg transition-colors"
+                title="Liên hệ Facebook"
+              >
+                <FaFacebook />
               </button>
             </div>
           </div>
