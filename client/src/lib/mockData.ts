@@ -316,6 +316,42 @@ export const mockPurchases = [
   }
 ];
 
+// Mock VPS data
+export const mockVPS = [
+  {
+    id: "vps-1",
+    name: "PROXY VN HTTP PRIVATE",
+    price: "30000",
+    duration: "30 ngày",
+    specs: {
+      cores: "1 CORE",
+      ram: "1 GB",
+      feature: "IP ZALO 0766702003"
+    },
+    availability: {
+      inStock: 901,
+      purchased: 99
+    },
+    isActive: true
+  },
+  {
+    id: "vps-2", 
+    name: "VPS VN + TOOL NRO",
+    price: "90000",
+    duration: "30 ngày",
+    specs: {
+      cores: "1 CORE", 
+      ram: "1 GB",
+      feature: "Tự động tạt VPSx Net chỉ từ 90k"
+    },
+    availability: {
+      inStock: 999,
+      purchased: 191
+    },
+    isActive: true
+  }
+];
+
 // Default credentials
 export const defaultCredentials = {
   user: {
