@@ -20,7 +20,8 @@ import {
   HardDrive,
   Eye,
   ChevronUp,
-  X
+  X,
+  ChevronDown
 } from "lucide-react";
 import {
   Dialog,
@@ -31,6 +32,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Tool, Category } from "@shared/schema";
 
 export default function Home() {
@@ -43,6 +51,7 @@ export default function Home() {
   const [selectedTool, setSelectedTool] = useState<typeof mockTools[0] | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [selectedMonths, setSelectedMonths] = useState<string>("1");
 
   // Use mock data instead of API calls
   const tools = mockTools;
@@ -329,6 +338,133 @@ export default function Home() {
                 </p>
               </div>
             )}
+          </motion.div>
+
+          {/* PROXY VIỆT Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mt-16 mb-12"
+          >
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                <span className="bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
+                  PROXY VIỆT
+                </span>
+              </h2>
+              <div className="h-1 w-16 bg-gradient-to-r from-red-600 to-yellow-600 mx-auto rounded-full"></div>
+            </div>
+            
+            {/* Single Proxy Display */}
+            {(() => {
+              const proxyTool = tools.find(tool => tool.categoryId === "5");
+              
+              if (!proxyTool) {
+                return (
+                  <div className="text-center py-8">
+                    <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">Không có proxy nào</p>
+                  </div>
+                );
+              }
+
+              // Calculate price based on selected months
+              const baseMonthlyPrice = 50000; // 50k per month
+              const months = parseInt(selectedMonths);
+              const calculatedPrice = baseMonthlyPrice * months;
+              
+              return (
+                <div className="max-w-md mx-auto">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Card className="overflow-hidden border-2 hover:border-red-200 dark:hover:border-red-700 transition-all duration-300 hover:shadow-lg">
+                      <CardContent className="p-8">
+                        {/* Proxy Image */}
+                        <div className="text-center mb-6">
+                          <div className="w-20 h-20 mx-auto mb-4 rounded-lg overflow-hidden">
+                            <img 
+                              src={proxyTool.imageUrl} 
+                              alt={proxyTool.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            {proxyTool.name}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            {proxyTool.description}
+                          </p>
+                        </div>
+
+                        {/* Price Display */}
+                        <div className="text-center mb-6">
+                          <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                            Giá / tháng
+                          </div>
+                          <div className="text-3xl font-bold text-red-500 mb-2">
+                            {baseMonthlyPrice.toLocaleString('vi-VN')} ₫
+                          </div>
+                          <div className="text-lg text-gray-600 dark:text-gray-300">
+                            {months > 1 && (
+                              <span>
+                                Tổng {months} tháng: <span className="font-bold text-primary">
+                                  {calculatedPrice.toLocaleString('vi-VN')} ₫
+                                </span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Month Selection */}
+                        <div className="mb-6">
+                          <Label htmlFor="months" className="text-sm font-medium mb-2 block">
+                            Chọn số tháng
+                          </Label>
+                          <Select value={selectedMonths} onValueChange={setSelectedMonths}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Chọn tháng" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1 tháng</SelectItem>
+                              <SelectItem value="2">2 tháng</SelectItem>
+                              <SelectItem value="3">3 tháng</SelectItem>
+                              <SelectItem value="6">6 tháng</SelectItem>
+                              <SelectItem value="12">12 tháng</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Purchase Button */}
+                        <Button 
+                          className="w-full bg-gradient-to-r from-red-500 to-yellow-600 hover:from-red-600 hover:to-yellow-700 text-white font-medium text-lg py-3"
+                          onClick={() => {
+                            if (!isAuthenticated) {
+                              toast({
+                                title: "Cần đăng nhập",
+                                description: "Vui lòng đăng nhập để xem demo mua proxy",
+                                variant: "default",
+                              });
+                              return;
+                            }
+                            toast({
+                              title: "Demo: Mua Proxy",
+                              description: `Mua ${proxyTool.name} ${months} tháng - ${calculatedPrice.toLocaleString('vi-VN')}₫`,
+                            });
+                          }}
+                          data-testid="button-purchase-proxy"
+                        >
+                          MUA ({calculatedPrice.toLocaleString('vi-VN')}₫)
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </div>
+              );
+            })()}
           </motion.div>
 
           {/* Statistics Section */}

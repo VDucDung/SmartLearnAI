@@ -1,4 +1,5 @@
 // Mock data for tools and categories
+import proxyLogo from "@assets/generated_images/Vietnamese_proxy_service_logo_06ef3414.png";
 export const mockCategories = [
   {
     id: "1",
@@ -22,6 +23,12 @@ export const mockCategories = [
     id: "4",
     name: "Phân tích dữ liệu",
     slug: "analytics",
+    createdAt: new Date(),
+  },
+  {
+    id: "5",
+    name: "PROXY VIỆT",
+    slug: "proxy-viet",
     createdAt: new Date(),
   }
 ];
@@ -218,6 +225,26 @@ export const mockTools = [
     createdAt: new Date(),
     updatedAt: new Date(),
     category: mockCategories[2]
+  },
+  {
+    id: "9",
+    name: "PROXY VIỆT NAM",
+    description: "Proxy Việt Nam chất lượng cao, tốc độ nhanh, ổn định cho mọi nhu cầu",
+    price: "50000", // Base price per month
+    baseMonthlyPrice: "50000", // 50k per month
+    categoryId: "5",
+    imageUrl: proxyLogo,
+    videoUrl: null,
+    instructions: "Hướng dẫn sử dụng proxy:\n1. Sao chép IP và port\n2. Nhập vào trình duyệt hoặc ứng dụng\n3. Sử dụng username/password được cung cấp",
+    downloadUrl: "https://example.com/download/proxy-vn",
+    views: 2845,
+    purchases: 456,
+    rating: "4.8",
+    reviewCount: 123,
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: mockCategories[4]
   }
 ];
 
