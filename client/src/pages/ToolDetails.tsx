@@ -169,10 +169,10 @@ export default function ToolDetails() {
           <div className="text-center py-16">
             <h1 className="text-2xl font-bold mb-4">Không tìm thấy công cụ</h1>
             <p className="text-muted-foreground mb-6">Công cụ bạn tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-            <Link href="/tools">
-              <Button data-testid="button-back-to-tools">
+            <Link href="/">
+              <Button data-testid="button-back-to-home">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Quay lại danh sách
+                Quay lại trang chủ
               </Button>
             </Link>
           </div>
@@ -183,7 +183,7 @@ export default function ToolDetails() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Back Button */}
           <motion.div
@@ -191,10 +191,10 @@ export default function ToolDetails() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <Link href="/tools">
-              <Button variant="ghost" className="mb-8" data-testid="button-back-to-tools">
+            <Link href="/">
+              <Button variant="ghost" className="mb-8" data-testid="button-back-to-home">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Quay lại danh sách
+                Quay lại trang chủ
               </Button>
             </Link>
           </motion.div>
@@ -225,7 +225,7 @@ export default function ToolDetails() {
                       {tool.name}
                     </h1>
                     
-                    <div className="text-sm text-gray-600 mb-6">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                       Người bán: <span className="text-blue-600 font-medium">linhcong</span>
                     </div>
 
@@ -235,7 +235,7 @@ export default function ToolDetails() {
                         <Button
                           key={index}
                           variant="outline"
-                          className="w-full h-12 justify-between bg-gray-800 text-white hover:bg-gray-700 border-gray-700"
+                          className="w-full h-12 justify-between bg-primary text-primary-foreground hover:bg-primary/90 border-gray-300 dark:border-gray-600"
                           onClick={() => handlePurchase()}
                           data-testid={`button-purchase-${priceOption.duration.replace(' ', '-').toLowerCase()}`}
                         >
@@ -247,7 +247,7 @@ export default function ToolDetails() {
                       )) : (
                         <Button
                           variant="outline"
-                          className="w-full h-12 justify-between bg-gray-800 text-white hover:bg-gray-700 border-gray-700"
+                          className="w-full h-12 justify-between bg-primary text-primary-foreground hover:bg-primary/90 border-gray-300 dark:border-gray-600"
                           onClick={() => handlePurchase()}
                           data-testid="button-purchase-permanent"
                         >
@@ -273,15 +273,15 @@ export default function ToolDetails() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <div className="flex items-center space-x-4">
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                           <Eye className="w-4 h-4 mr-1" />
                           <span data-testid="text-tool-views">{(tool.views || 0).toLocaleString('vi-VN')} lượt xem</span>
                         </div>
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                           <ShoppingCart className="w-4 h-4 mr-1" />
                           <span>{(tool.purchases || 0).toLocaleString('vi-VN')} lượt mua</span>
                         </div>
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
                           <Star className="w-4 h-4 mr-1 text-yellow-500 fill-current" />
                           <span>{Number(tool.rating).toFixed(1)} ({tool.reviewCount} đánh giá)</span>
                         </div>
@@ -291,7 +291,7 @@ export default function ToolDetails() {
                       
                       <div>
                         <h3 className="font-semibold mb-2">Mô tả sản phẩm:</h3>
-                        <p className="text-gray-700 leading-relaxed" data-testid="text-tool-description">
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed" data-testid="text-tool-description">
                           {tool.description}
                         </p>
                       </div>
@@ -302,7 +302,7 @@ export default function ToolDetails() {
                           <h3 className="font-semibold mb-3">Hình ảnh demo</h3>
                           <div className="space-y-4">
                             {tool.imageUrl && (
-                              <div className="border rounded-lg overflow-hidden bg-gray-50">
+                              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800">
                                 <img 
                                   src={tool.imageUrl} 
                                   alt={`Demo ${tool.name}`}
@@ -313,7 +313,7 @@ export default function ToolDetails() {
                             )}
                             
                             {tool.videoUrl && (
-                              <div className="border rounded-lg overflow-hidden bg-gray-50">
+                              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800">
                                 <video 
                                   controls 
                                   className="w-full h-auto max-h-96"
@@ -331,8 +331,8 @@ export default function ToolDetails() {
                       {tool.instructions && (
                         <div>
                           <h3 className="font-semibold mb-2">Hướng dẫn sử dụng:</h3>
-                          <div className="bg-gray-50 p-4 rounded-lg" data-testid="content-tool-instructions">
-                            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700">
+                          <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700" data-testid="content-tool-instructions">
+                            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700 dark:text-gray-300">
                               {tool.instructions}
                             </pre>
                           </div>
@@ -350,16 +350,16 @@ export default function ToolDetails() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="sticky top-24 bg-gray-50">
+              <Card className="sticky top-24 bg-gray-50 dark:bg-gray-800">
                 <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div className="bg-white p-4 rounded-lg border">
-                      <h3 className="font-semibold mb-2 text-gray-800">Bạn có thể thanh toán sản phẩm vào giỏ</h3>
-                      <p className="text-sm text-gray-600">Thanh toán một lúc</p>
+                    <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Bạn có thể thanh toán sản phẩm vào giỏ</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Thanh toán một lúc</p>
                     </div>
                     
-                    <div className="bg-white p-4 rounded-lg border">
-                      <p className="text-sm text-gray-700 leading-relaxed">
+                    <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                         <strong>Nếu có lỗi xảy ra hãy liên hệ với admin</strong><br/>
                         Phương pháp liên hệ ở trang chủ
                       </p>
