@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Header } from "@/components/Header";
+import { Layout } from "@/components/Layout";
 import { 
   Shield, 
   Zap, 
@@ -37,8 +37,7 @@ export default function Landing() {
   ];
 
   return (
-    <>
-      <Header />
+    <Layout>
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative py-20 bg-gradient-to-br from-blue-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800">
@@ -232,6 +231,6 @@ export default function Landing() {
           </div>
         </footer>
       </div>
-    </>
+    </Layout>
   );
 }

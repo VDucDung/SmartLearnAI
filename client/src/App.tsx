@@ -7,7 +7,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
-import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
 import Tools from "@/pages/Tools";
 import ToolDetails from "@/pages/ToolDetails";
@@ -28,16 +27,13 @@ function Router() {
     <Switch>
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      
       <Route path="/" component={Home} />
       <Route path="/tools" component={Tools} />
       <Route path="/tools/:id" component={ToolDetails} />
       <Route path="/statistics" component={Statistics} />
       
-      {isLoading || !isAuthenticated ? (
-        <>
-          <Route path="/landing" component={Landing} />
-        </>
-      ) : (
+      {isAuthenticated && (
         <>
           <Route path="/purchased-tools" component={PurchasedTools} />
           <Route path="/deposit" component={Deposit} />
@@ -46,7 +42,6 @@ function Router() {
           <Route path="/admin" component={AdminPanel} />
           <Route path="/admin/:section" component={AdminPanel} />
           <Route path="/checkout" component={Checkout} />
-          <Route path="/home" component={Home} />
         </>
       )}
       <Route component={NotFound} />

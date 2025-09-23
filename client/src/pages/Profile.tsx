@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +11,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { User, Lock, Save, Edit } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { apiRequest } from "@/lib/queryClient";
+import { Link } from "wouter";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -141,17 +143,20 @@ export default function Profile() {
 
   if (!user) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <p className="text-muted-foreground">Vui lòng đăng nhập để xem thông tin cá nhân.</p>
+      <Layout showSidebar={isAuthenticated}>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <p className="text-muted-foreground">Vui lòng đăng nhập để xem thông tin cá nhân.</p>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-md">
-      <div className="space-y-4">
+    <Layout showSidebar={isAuthenticated}>
+      <div className="container mx-auto px-4 py-8 max-w-md">
+        <div className="space-y-4">
         {/* User Info Card */}
         <Card className="w-full">
           <CardContent className="pt-6">
@@ -183,22 +188,22 @@ export default function Profile() {
         <Card className="w-full">
           <CardContent className="p-0">
             <div className="divide-y divide-border">
-              <a href="/profile" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-profile">
+              <Link href="/profile" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-profile">
                 <User className="h-5 w-5 text-blue-500" />
                 <span className="font-medium">Thông tin cá nhân</span>
-              </a>
-              <a href="/purchased-tools" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-purchased-tools">
+              </Link>
+              <Link href="/purchased-tools" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-purchased-tools">
                 <div className="h-5 w-5 text-orange-500 flex items-center justify-center">📦</div>
                 <span className="font-medium">Công cụ đã mua</span>
-              </a>
-              <a href="/deposit" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-deposit">
+              </Link>
+              <Link href="/deposit" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-deposit">
                 <div className="h-5 w-5 text-gray-600 flex items-center justify-center">💳</div>
                 <span className="font-medium">Nạp tiền</span>
-              </a>
-              <a href="/history" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-history">
+              </Link>
+              <Link href="/history" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-history">
                 <div className="h-5 w-5 text-gray-600 flex items-center justify-center">🕒</div>
                 <span className="font-medium">Lịch sử</span>
-              </a>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -284,6 +289,7 @@ export default function Profile() {
           </Card>
         </div>
       )}
-    </div>
+      </div>
+    </Layout>
   );
 }
