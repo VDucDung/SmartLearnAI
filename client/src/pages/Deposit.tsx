@@ -24,7 +24,7 @@ import { useState } from "react";
 import type { Payment } from "@shared/schema";
 
 export default function Deposit() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -96,7 +96,7 @@ export default function Deposit() {
   const recentDeposits = payments?.filter(p => p.type === "deposit").slice(0, 5) || [];
 
   return (
-    <Layout showSidebar>
+    <Layout showSidebar={isAuthenticated}>
       <div className="p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

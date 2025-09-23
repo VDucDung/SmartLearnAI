@@ -150,85 +150,103 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Thông tin cá nhân</h1>
-          <p className="text-muted-foreground">
-            Quản lý thông tin tài khoản và cài đặt bảo mật của bạn.
-          </p>
-        </div>
-
-        {/* Profile Information Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Thông tin cá nhân
-            </CardTitle>
-            {!isEditingProfile && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsEditingProfile(true)}
-                data-testid="button-edit-profile"
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                Chỉnh sửa
-              </Button>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Avatar Section */}
-            <div className="flex items-center space-x-4">
-              <Avatar className="h-20 w-20">
+    <div className="container mx-auto px-4 py-8 max-w-md">
+      <div className="space-y-4">
+        {/* User Info Card */}
+        <Card className="w-full">
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-4 mb-4">
+              <Avatar className="h-12 w-12">
                 <AvatarImage src={user.profileImageUrl} alt="" />
-                <AvatarFallback className="text-lg">
+                <AvatarFallback className="text-sm">
                   {user.firstName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="text-lg font-semibold" data-testid="text-user-display-name">
+                <h2 className="font-bold text-lg" data-testid="text-user-display-name">
                   {user.firstName && user.lastName 
                     ? `${user.firstName} ${user.lastName}`
                     : user.email}
-                </h3>
+                </h2>
                 <p className="text-sm text-muted-foreground">
                   {user.isAdmin ? "Quản trị viên" : "Thành viên"}
                 </p>
-                <p className="text-sm font-medium text-emerald-600" data-testid="text-user-balance-profile">
+                <p className="text-sm font-semibold text-emerald-600" data-testid="text-user-balance-profile">
                   Số dư: {Number(user.balance || 0).toLocaleString('vi-VN')}₫
                 </p>
               </div>
             </div>
+          </CardContent>
+        </Card>
 
-            <Separator />
+        {/* Navigation Menu */}
+        <Card className="w-full">
+          <CardContent className="p-0">
+            <div className="divide-y divide-border">
+              <a href="/profile" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-profile">
+                <User className="h-5 w-5 text-blue-500" />
+                <span className="font-medium">Thông tin cá nhân</span>
+              </a>
+              <a href="/purchased-tools" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-purchased-tools">
+                <div className="h-5 w-5 text-orange-500 flex items-center justify-center">📦</div>
+                <span className="font-medium">Công cụ đã mua</span>
+              </a>
+              <a href="/deposit" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-deposit">
+                <div className="h-5 w-5 text-gray-600 flex items-center justify-center">💳</div>
+                <span className="font-medium">Nạp tiền</span>
+              </a>
+              <a href="/history" className="flex items-center space-x-3 px-4 py-4 hover:bg-accent transition-colors" data-testid="link-history">
+                <div className="h-5 w-5 text-gray-600 flex items-center justify-center">🕒</div>
+                <span className="font-medium">Lịch sử</span>
+              </a>
+            </div>
+          </CardContent>
+        </Card>
 
-            {/* Profile Form */}
-            {isEditingProfile ? (
+        {/* Edit Profile Button */}
+        <Card className="w-full">
+          <CardContent className="pt-6">
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              onClick={() => setIsEditingProfile(true)}
+              data-testid="button-edit-profile"
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Chỉnh sửa thông tin
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Edit Profile Modal/Overlay */}
+      {isEditingProfile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <CardTitle>Chỉnh sửa thông tin</CardTitle>
+            </CardHeader>
+            <CardContent>
               <form onSubmit={handleProfileSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">Họ</Label>
-                    <Input
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="Nhập họ của bạn"
-                      data-testid="input-first-name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Tên</Label>
-                    <Input
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Nhập tên của bạn"
-                      data-testid="input-last-name"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">Họ</Label>
+                  <Input
+                    id="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Nhập họ của bạn"
+                    data-testid="input-first-name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Tên</Label>
+                  <Input
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Nhập tên của bạn"
+                    data-testid="input-last-name"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -245,132 +263,27 @@ export default function Profile() {
                   <Button 
                     type="submit" 
                     disabled={updateProfileMutation.isPending}
+                    className="flex-1"
                     data-testid="button-save-profile"
                   >
                     <Save className="h-4 w-4 mr-2" />
-                    {updateProfileMutation.isPending ? "Đang lưu..." : "Lưu thay đổi"}
+                    {updateProfileMutation.isPending ? "Đang lưu..." : "Lưu"}
                   </Button>
                   <Button 
                     type="button" 
                     variant="outline" 
                     onClick={handleCancelEdit}
+                    className="flex-1"
                     data-testid="button-cancel-profile"
                   >
                     Hủy
                   </Button>
                 </div>
               </form>
-            ) : (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Họ</Label>
-                    <p className="text-sm" data-testid="text-first-name">{user.firstName || "Chưa cập nhật"}</p>
-                  </div>
-                  <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Tên</Label>
-                    <p className="text-sm" data-testid="text-last-name">{user.lastName || "Chưa cập nhật"}</p>
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium text-muted-foreground">Email</Label>
-                  <p className="text-sm" data-testid="text-email">{user.email}</p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Password Change Card */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
-              Đổi mật khẩu
-            </CardTitle>
-            {!isChangingPassword && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsChangingPassword(true)}
-                data-testid="button-change-password"
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                Đổi mật khẩu
-              </Button>
-            )}
-          </CardHeader>
-          <CardContent>
-            {isChangingPassword ? (
-              <form onSubmit={handlePasswordSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Mật khẩu hiện tại</Label>
-                  <Input
-                    id="currentPassword"
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="Nhập mật khẩu hiện tại"
-                    data-testid="input-current-password"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword">Mật khẩu mới</Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
-                    data-testid="input-new-password"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Nhập lại mật khẩu mới"
-                    data-testid="input-confirm-password"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button 
-                    type="submit" 
-                    disabled={changePasswordMutation.isPending}
-                    data-testid="button-save-password"
-                  >
-                    <Save className="h-4 w-4 mr-2" />
-                    {changePasswordMutation.isPending ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => {
-                      setIsChangingPassword(false);
-                      setCurrentPassword("");
-                      setNewPassword("");
-                      setConfirmPassword("");
-                    }}
-                    data-testid="button-cancel-password"
-                  >
-                    Hủy
-                  </Button>
-                </div>
-              </form>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                <p>Nhấn "Đổi mật khẩu" để thay đổi mật khẩu của bạn.</p>
-                <p className="mt-2">
-                  <strong>Lưu ý:</strong> Mật khẩu mới phải có ít nhất 6 ký tự.
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

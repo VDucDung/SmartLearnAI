@@ -2,6 +2,7 @@ import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,7 @@ import { Link } from "wouter";
 import type { Purchase, Tool } from "@shared/schema";
 
 export default function PurchasedTools() {
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -117,7 +119,7 @@ export default function PurchasedTools() {
   }) || [];
 
   return (
-    <Layout showSidebar>
+    <Layout showSidebar={isAuthenticated}>
       <div className="p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

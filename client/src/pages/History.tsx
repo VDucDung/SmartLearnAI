@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,6 +19,7 @@ import {
 import type { Payment, Purchase, Tool } from "@shared/schema";
 
 export default function History() {
+  const { isAuthenticated } = useAuth();
   const { data: payments, isLoading: paymentsLoading } = useQuery<Payment[]>({
     queryKey: ["/api/payments"],
     retry: false,
@@ -106,7 +108,7 @@ export default function History() {
   };
 
   return (
-    <Layout showSidebar>
+    <Layout showSidebar={isAuthenticated}>
       <div className="p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
