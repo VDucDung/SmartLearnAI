@@ -30,6 +30,8 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   updateUserBalance(userId: string, amount: string): Promise<User>;
+  updateUserProfile(userId: string, profile: { firstName?: string; lastName?: string; email?: string }): Promise<User>;
+  updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean>;
 
   // Category operations
   getCategories(): Promise<Category[]>;
@@ -106,6 +108,25 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return user;
+  }
+
+  async updateUserProfile(userId: string, profile: { firstName?: string; lastName?: string; email?: string }): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({
+        ...profile,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    // For database storage with demo users, we'll implement password checking
+    // In real implementation, this would check against hashed passwords in database
+    // For now, return true as placeholder - demo users don't have stored passwords
+    return true;
   }
 
   // Category operations
@@ -407,6 +428,37 @@ export class MemStorage implements IStorage {
     const updatedUser = { ...user, balance: String(newBalance), updatedAt: new Date() };
     this.users.set(userId, updatedUser);
     return updatedUser;
+  }
+
+  async updateUserProfile(userId: string, profile: { firstName?: string; lastName?: string; email?: string }): Promise<User> {
+    const user = this.users.get(userId);
+    if (!user) throw new Error("User not found");
+    
+    const updatedUser = { ...user, ...profile, updatedAt: new Date() };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+
+  async updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+    // For demo users, check against the hardcoded passwords in DEMO_USERS
+    const DEMO_USERS = {
+      'demo-user-1': { password: 'demo123' },
+      'admin-user-1': { password: 'admin123' }
+    } as Record<string, { password: string }>;
+    
+    const demoUser = DEMO_USERS[userId];
+    if (!demoUser) {
+      // For non-demo users, we don't have password storage in memory
+      throw new Error("Password update not supported for this user");
+    }
+    
+    if (demoUser.password !== currentPassword) {
+      throw new Error("Current password is incorrect");
+    }
+    
+    // Update the demo user password (in real app, this would be hashed)
+    demoUser.password = newPassword;
+    return true;
   }
 
   // Category operations

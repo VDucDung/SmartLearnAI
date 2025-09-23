@@ -19,6 +19,7 @@ import Checkout from "@/pages/Checkout";
 import Statistics from "@/pages/Statistics";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Profile from "@/pages/Profile";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -41,6 +42,7 @@ function Router() {
           <Route path="/purchased-tools" component={PurchasedTools} />
           <Route path="/deposit" component={Deposit} />
           <Route path="/history" component={History} />
+          <Route path="/profile" component={Profile} />
           <Route path="/admin" component={AdminPanel} />
           <Route path="/admin/:section" component={AdminPanel} />
           <Route path="/checkout" component={Checkout} />

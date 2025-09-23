@@ -145,6 +145,12 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
+                    <Link href="/profile" className="flex items-center">
+                      <User className="mr-2 h-4 w-4 text-blue-500" />
+                      <span>Thông tin tài khoản</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/deposit" className="flex items-center">
                       <Send className="mr-2 h-4 w-4 text-pink-500" />
                       <span>Chuyển Tiền</span>

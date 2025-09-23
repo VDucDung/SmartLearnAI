@@ -9,6 +9,7 @@ import {
   Users,
   Settings,
   PlusCircle,
+  User2,
 } from "lucide-react";
 
 export function Sidebar() {
@@ -16,6 +17,11 @@ export function Sidebar() {
   const { user } = useAuth();
 
   const navigation = [
+    {
+      name: "Thông tin cá nhân",
+      href: "/profile",
+      icon: User2,
+    },
     {
       name: "Công cụ đã mua",
       href: "/purchased-tools",

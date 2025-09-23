@@ -130,6 +130,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User profile routes
+  app.patch('/api/user/profile', async (req: any, res) => {
+    try {
+      let userId: string;
+      
+      // Check if user is using demo authentication
+      if ((req.session as any)?.demoUser) {
+        userId = (req.session as any).demoUser.id;
+      } else if (req.isAuthenticated() && req.user?.claims?.sub) {
+        userId = req.user.claims.sub;
+      } else {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      const { firstName, lastName, email } = req.body;
+      
+      if (!firstName || !lastName) {
+        return res.status(400).json({ message: "First name and last name are required" });
+      }
+      
+      const updatedUser = await storage.updateUserProfile(userId, {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email?.trim(),
+      });
+      
+      // Update demo session if using demo auth
+      if ((req.session as any)?.demoUser) {
+        (req.session as any).demoUser = {
+          ...(req.session as any).demoUser,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+        };
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  app.patch('/api/user/password', async (req: any, res) => {
+    try {
+      let userId: string;
+      
+      // Check if user is using demo authentication
+      if ((req.session as any)?.demoUser) {
+        userId = (req.session as any).demoUser.id;
+      } else if (req.isAuthenticated() && req.user?.claims?.sub) {
+        userId = req.user.claims.sub;
+      } else {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: "Current password and new password are required" });
+      }
+      
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "New password must be at least 6 characters long" });
+      }
+      
+      const success = await storage.updateUserPassword(userId, currentPassword, newPassword);
+      
+      if (!success) {
+        return res.status(400).json({ message: "Failed to update password" });
+      }
+      
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      if (error instanceof Error && error.message === "Current password is incorrect") {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+      res.status(500).json({ message: "Failed to update password" });
+    }
+  });
+
   // Categories
   app.get('/api/categories', async (req, res) => {
     try {
