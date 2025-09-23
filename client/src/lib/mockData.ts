@@ -1,5 +1,6 @@
 // Mock data for tools and categories
-import proxyLogo from "@assets/generated_images/Vietnamese_proxy_service_logo_06ef3414.png";
+// Using placeholder image URL instead of imported asset to avoid module resolution issues
+const proxyLogo = "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200";
 export const mockCategories = [
   {
     id: "1",
@@ -347,7 +348,7 @@ export const mockPurchases = [
 export const mockVPS = [
   {
     id: "vps-1",
-    name: "PROXY VN HTTP PRIVATE",
+    name: "VN HTTP PRIVATE",
     price: "30000",
     duration: "30 ngày",
     specs: {
@@ -369,11 +370,27 @@ export const mockVPS = [
     specs: {
       cores: "1 CORE", 
       ram: "1 GB",
-      feature: "Tự động tạt VPSx Net chỉ từ 90k"
+      feature: "VPS chuyên game NRO"
     },
     availability: {
       inStock: 999,
       purchased: 191
+    },
+    isActive: true
+  },
+  {
+    id: "vps-3",
+    name: "VPS VN PREMIUM",
+    price: "150000",
+    duration: "30 ngày",
+    specs: {
+      cores: "2 CORE",
+      ram: "2 GB",
+      feature: "VPS cao cấp hiệu năng tốt"
+    },
+    availability: {
+      inStock: 456,
+      purchased: 344
     },
     isActive: true
   }

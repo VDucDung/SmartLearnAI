@@ -9,7 +9,6 @@ import { useAuth } from "@/hooks/useAuth";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Home from "@/pages/Home";
-import Dashboard from "@/pages/Dashboard";
 import Tools from "@/pages/Tools";
 import ToolDetails from "@/pages/ToolDetails";
 import PurchasedTools from "@/pages/PurchasedTools";
@@ -39,7 +38,6 @@ function Router() {
         </>
       ) : (
         <>
-          <Route path="/dashboard" component={Dashboard} />
           <Route path="/purchased-tools" component={PurchasedTools} />
           <Route path="/deposit" component={Deposit} />
           <Route path="/history" component={History} />

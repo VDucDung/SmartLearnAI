@@ -323,7 +323,7 @@ export default function Home() {
                             });
                           }}
                         >
-                          XEM CHI TIẾT
+                          ĐĂNG KÝ
                         </Button>
                       </CardContent>
                     </Card>

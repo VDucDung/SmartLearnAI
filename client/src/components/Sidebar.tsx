@@ -3,7 +3,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  LayoutDashboard,
   ShoppingBag,
   CreditCard,
   History,
@@ -17,11 +16,6 @@ export function Sidebar() {
   const { user } = useAuth();
 
   const navigation = [
-    {
-      name: "Dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-    },
     {
       name: "Công cụ đã mua",
       href: "/purchased-tools",
