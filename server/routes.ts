@@ -727,6 +727,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!key) {
         await storage.logKeyValidation({
           keyValue: '',
+          userId: null,
+          toolId: null,
           isValid: false,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
@@ -739,6 +741,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!purchase) {
         await storage.logKeyValidation({
           keyValue: key,
+          userId: null,
+          toolId: null,
           isValid: false,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,

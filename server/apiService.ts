@@ -1,6 +1,18 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-const API_BASE_URL = 'https://shopnro.hitly.click';
+// Extract the URL from environment variable, handling "host: URL" format
+const parseApiUrl = (envValue: string | undefined): string => {
+  if (!envValue) return 'https://shopnro.hitly.click';
+  
+  // If the value contains "host:", extract just the URL part
+  if (envValue.includes('host:')) {
+    return envValue.split('host:')[1].trim();
+  }
+  
+  return envValue.trim();
+};
+
+const API_BASE_URL = parseApiUrl(process.env.API_BASE_URL);
 
 // API Response Types
 interface ApiResponse<T = any> {
