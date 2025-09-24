@@ -2,8 +2,18 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { jwtAuthMiddleware, requireAuth, getCurrentUser } from "./jwtAuth";
+import { apiService } from "./apiService";
 import { z } from "zod";
 import { insertToolSchema, insertCategorySchema, insertDiscountCodeSchema } from "@shared/schema";
+import { 
+  loginRequestSchema, 
+  registerRequestSchema, 
+  updateProfileRequestSchema, 
+  changePasswordRequestSchema,
+  forgotPasswordRequestSchema,
+  refreshTokenRequestSchema 
+} from "@shared/authTypes";
 
 // Demo user credentials
 const DEMO_USERS = {
@@ -32,101 +42,293 @@ const DEMO_USERS = {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
+  // Auth middleware - Add JWT middleware after session middleware
   await setupAuth(app);
+  app.use(jwtAuthMiddleware);
 
-  // Demo login endpoint
-  app.post('/api/auth/demo-login', async (req, res) => {
+  // External API login endpoint
+  app.post('/api/auth/login', async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const validatedData = loginRequestSchema.parse(req.body);
       
-      // Check if credentials match demo users
-      const user = Object.values(DEMO_USERS).find(u => u.username === username && u.password === password);
+      const response = await apiService.login(validatedData);
       
-      if (!user) {
-        return res.status(401).json({ message: "Invalid credentials" });
-      }
-      
-      // Create a demo session by storing user info in session
-      (req.session as any).demoUser = user;
-      
-      // Ensure demo user exists in storage for backend compatibility
-      try {
-        await storage.upsertUser({
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          profileImageUrl: user.profileImageUrl,
-          balance: user.balance,
-          isAdmin: user.isAdmin,
+      if (response.success && response.data) {
+        res.json({
+          success: true,
+          message: "Đăng nhập thành công",
+          data: {
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+            user: response.data.user
+          }
         });
-      } catch (storageError) {
-        console.error("Error upserting demo user to storage:", storageError);
-        // Continue even if storage fails - demo might work without DB
+      } else {
+        res.status(401).json({
+          success: false,
+          message: response.message || "Thông tin đăng nhập không chính xác"
+        });
       }
+    } catch (error: any) {
+      console.error("Login error:", error);
       
-      res.json({ 
-        message: "Login successful",
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          profileImageUrl: user.profileImageUrl,
-          balance: user.balance,
-          isAdmin: user.isAdmin,
-        }
-      });
-    } catch (error) {
-      console.error("Error during demo login:", error);
-      res.status(500).json({ message: "Login failed" });
+      if (error.name === 'ZodError') {
+        res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: error.errors
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.message || "Có lỗi xảy ra khi đăng nhập"
+        });
+      }
     }
   });
 
-  // Demo logout endpoint
-  app.post('/api/auth/demo-logout', async (req, res) => {
+  // External API register endpoint
+  app.post('/api/auth/register', async (req, res) => {
     try {
-      delete (req.session as any).demoUser;
-      res.json({ message: "Logout successful" });
-    } catch (error) {
-      console.error("Error during demo logout:", error);
-      res.status(500).json({ message: "Logout failed" });
+      const validatedData = registerRequestSchema.parse(req.body);
+      
+      const response = await apiService.register(validatedData);
+      
+      if (response.success && response.data) {
+        res.json({
+          success: true,
+          message: "Đăng ký thành công",
+          data: {
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+            user: response.data.user
+          }
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: response.message || "Đăng ký thất bại"
+        });
+      }
+    } catch (error: any) {
+      console.error("Register error:", error);
+      
+      if (error.name === 'ZodError') {
+        res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: error.errors
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.message || "Có lỗi xảy ra khi đăng ký"
+        });
+      }
     }
   });
 
-  // Auth routes - Modified to support both demo and real auth
+  // Refresh token endpoint
+  app.post('/api/auth/refresh-token', async (req, res) => {
+    try {
+      const validatedData = refreshTokenRequestSchema.parse(req.body);
+      
+      const response = await apiService.refreshToken(validatedData);
+      
+      if (response.success && response.data) {
+        res.json({
+          success: true,
+          message: "Token đã được làm mới",
+          data: {
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken
+          }
+        });
+      } else {
+        res.status(401).json({
+          success: false,
+          message: response.message || "Không thể làm mới token"
+        });
+      }
+    } catch (error: any) {
+      console.error("Refresh token error:", error);
+      res.status(500).json({
+        success: false,
+        message: error.message || "Có lỗi xảy ra khi làm mới token"
+      });
+    }
+  });
+
+  // Logout endpoint
+  app.post('/api/auth/logout', async (req, res) => {
+    try {
+      // Clear API service token
+      apiService.logout();
+      
+      // Clear demo session if exists
+      delete (req.session as any).demoUser;
+      
+      res.json({
+        success: true,
+        message: "Đăng xuất thành công"
+      });
+    } catch (error: any) {
+      console.error("Logout error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Có lỗi xảy ra khi đăng xuất"
+      });
+    }
+  });
+
+  // Get current user endpoint - supports JWT, Demo, and Replit Auth
   app.get('/api/auth/user', async (req: any, res) => {
     try {
-      // Check if user is using demo authentication
-      if ((req.session as any)?.demoUser) {
-        const demoUser = (req.session as any).demoUser;
-        return res.json({
-          id: demoUser.id,
-          email: demoUser.email,
-          firstName: demoUser.firstName,
-          lastName: demoUser.lastName,
-          profileImageUrl: demoUser.profileImageUrl,
-          balance: demoUser.balance,
-          isAdmin: demoUser.isAdmin,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+      const user = await getCurrentUser(req);
+      
+      if (user) {
+        return res.json(user);
+      }
+      
+      // Fallback to original Replit auth logic if no other auth method worked
+      if (req.isAuthenticated() && req.user?.claims?.sub) {
+        const userId = req.user.claims.sub;
+        const storageUser = await storage.getUser(userId);
+        if (storageUser) {
+          return res.json(storageUser);
+        }
+      }
+      
+      return res.status(401).json({ message: "Unauthorized" });
+    } catch (error) {
+      console.error("Get user error:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Update profile endpoint
+  app.put('/api/auth/profile', requireAuth, async (req, res) => {
+    try {
+      const validatedData = updateProfileRequestSchema.parse(req.body);
+      
+      // If user is authenticated with JWT
+      if (req.jwtUser) {
+        const response = await apiService.updateProfile(validatedData);
+        
+        if (response.success && response.data) {
+          res.json({
+            success: true,
+            message: "Cập nhật thông tin thành công",
+            data: response.data
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: response.message || "Cập nhật thông tin thất bại"
+          });
+        }
+      } else {
+        // Demo/Replit auth users - not supported for profile update to external API
+        res.status(400).json({
+          success: false,
+          message: "Chức năng này chỉ hỗ trợ cho tài khoản đăng nhập qua API"
         });
       }
+    } catch (error: any) {
+      console.error("Update profile error:", error);
       
-      // Original authentication logic
-      if (!req.isAuthenticated() || !req.user?.claims?.sub) {
-        return res.status(401).json({ message: "Unauthorized" });
+      if (error.name === 'ZodError') {
+        res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: error.errors
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.message || "Có lỗi xảy ra khi cập nhật thông tin"
+        });
       }
+    }
+  });
+
+  // Change password endpoint
+  app.put('/api/auth/change-password', requireAuth, async (req, res) => {
+    try {
+      const validatedData = changePasswordRequestSchema.parse(req.body);
       
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
+      // If user is authenticated with JWT
+      if (req.jwtUser) {
+        const response = await apiService.changePassword(validatedData);
+        
+        if (response.success) {
+          res.json({
+            success: true,
+            message: "Đổi mật khẩu thành công"
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: response.message || "Đổi mật khẩu thất bại"
+          });
+        }
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "Chức năng này chỉ hỗ trợ cho tài khoản đăng nhập qua API"
+        });
       }
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+    } catch (error: any) {
+      console.error("Change password error:", error);
+      
+      if (error.name === 'ZodError') {
+        res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: error.errors
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.message || "Có lỗi xảy ra khi đổi mật khẩu"
+        });
+      }
+    }
+  });
+
+  // Forgot password endpoint  
+  app.post('/api/auth/forgot-password', async (req, res) => {
+    try {
+      const validatedData = forgotPasswordRequestSchema.parse(req.body);
+      
+      const response = await apiService.forgotPassword(validatedData);
+      
+      if (response.success) {
+        res.json({
+          success: true,
+          message: "Đã gửi hướng dẫn đặt lại mật khẩu qua email"
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: response.message || "Không thể gửi email đặt lại mật khẩu"
+        });
+      }
+    } catch (error: any) {
+      console.error("Forgot password error:", error);
+      
+      if (error.name === 'ZodError') {
+        res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: error.errors
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: error.message || "Có lỗi xảy ra"
+        });
+      }
     }
   });
 

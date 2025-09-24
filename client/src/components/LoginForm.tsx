@@ -5,95 +5,71 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Lock, User, Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import { useAuth } from "@/contexts/AuthContext";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginRequestSchema, type LoginRequest } from "@shared/authTypes";
 
 interface LoginFormProps {
   onLoginSuccess?: () => void;
 }
 
 export function LoginForm({ onLoginSuccess }: LoginFormProps) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberAccount, setRememberAccount] = useState(false);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const { login, isLoading } = useAuth();
 
-  // Load remembered username on component mount
+  // Form setup with validation
+  const form = useForm<LoginRequest>({
+    resolver: zodResolver(loginRequestSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  // Load remembered email on component mount
   useEffect(() => {
-    const rememberedUsername = localStorage.getItem("remembered-username");
-    if (rememberedUsername) {
-      setUsername(rememberedUsername);
+    const rememberedEmail = localStorage.getItem("remembered-email");
+    if (rememberedEmail) {
+      form.setValue("email", rememberedEmail);
       setRememberAccount(true);
     }
-  }, []);
+  }, [form]);
 
-  // Login mutation using React Query
-  const loginMutation = useMutation({
-    mutationFn: async ({ username, password }: { username: string; password: string }) => {
-      const response = await fetch("/api/auth/demo-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+  const handleSubmit = async (data: LoginRequest) => {
+    try {
+      await login(data);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Tên đăng nhập hoặc mật khẩu không đúng");
-      }
-
-      return data;
-    },
-    onSuccess: (data) => {
       // Handle remember account
       if (rememberAccount) {
-        localStorage.setItem("remembered-username", username);
+        localStorage.setItem("remembered-email", data.email);
       } else {
-        localStorage.removeItem("remembered-username");
+        localStorage.removeItem("remembered-email");
       }
 
       toast({
         title: "Đăng nhập thành công",
-        description: `Chào mừng ${data.user.firstName}!`,
+        description: "Chào mừng bạn đã quay trở lại!",
       });
 
-      // Invalidate user query and redirect
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       setLocation("/");
       
       if (onLoginSuccess) {
         onLoginSuccess();
       }
-    },
-    onError: (error: Error) => {
+    } catch (error: any) {
       toast({
         title: "Đăng nhập thất bại",
-        description: error.message,
+        description: error.message || "Thông tin đăng nhập không chính xác",
         variant: "destructive",
       });
-    },
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!username || !password) {
-      toast({
-        title: "Thiếu thông tin",
-        description: "Vui lòng nhập tài khoản và mật khẩu",
-        variant: "destructive",
-      });
-      return;
     }
-
-    loginMutation.mutate({ username, password });
   };
 
   const handleForgotPassword = () => {
@@ -114,9 +90,6 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
     });
   };
 
-
-  const isLoading = loginMutation.isPending;
-
   return (
     <div className="w-full max-w-md mx-auto">
       <Card className="overflow-hidden border-0 shadow-2xl bg-gray-800 text-white">
@@ -128,22 +101,24 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
         </CardHeader>
         
         <CardContent className="p-6 space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-4" data-testid="login-form">
-            {/* Account/Email Field */}
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4" data-testid="login-form">
+            {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-white font-medium">
-                Tài Khoản & Email
+              <Label htmlFor="email" className="text-white font-medium">
+                Email
               </Label>
               <Input
-                id="username"
-                data-testid="username-input"
-                type="text"
-                placeholder=""
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                data-testid="email-input"
+                type="email"
+                placeholder="Nhập email của bạn"
+                {...form.register("email")}
                 className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500"
                 disabled={isLoading}
               />
+              {form.formState.errors.email && (
+                <p className="text-red-400 text-sm">{form.formState.errors.email.message}</p>
+              )}
             </div>
 
             {/* Password Field */}
@@ -156,9 +131,8 @@ export function LoginForm({ onLoginSuccess }: LoginFormProps) {
                   id="password"
                   data-testid="password-input"
                   type={showPassword ? "text" : "password"}
-                  placeholder=""
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Nhập mật khẩu của bạn"
+                  {...form.register("password")}
                   className="bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500 pr-10"
                   disabled={isLoading}
                 />

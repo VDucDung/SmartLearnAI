@@ -1,5 +1,40 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+// Token storage helper functions
+export const getTokens = () => {
+  try {
+    const tokens = localStorage.getItem('auth_tokens');
+    return tokens ? JSON.parse(tokens) : null;
+  } catch {
+    return null;
+  }
+};
+
+export const setTokens = (tokens: { accessToken: string; refreshToken: string } | null) => {
+  if (tokens) {
+    localStorage.setItem('auth_tokens', JSON.stringify(tokens));
+  } else {
+    localStorage.removeItem('auth_tokens');
+  }
+};
+
+export const getUser = () => {
+  try {
+    const user = localStorage.getItem('auth_user');
+    return user ? JSON.parse(user) : null;
+  } catch {
+    return null;
+  }
+};
+
+export const setUser = (user: any) => {
+  if (user) {
+    localStorage.setItem('auth_user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('auth_user');
+  }
+};
+
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -12,11 +47,21 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
+  const tokens = getTokens();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  // Add JWT token if available
+  if (tokens?.accessToken) {
+    headers.Authorization = `Bearer ${tokens.accessToken}`;
+  }
+
   const res = await fetch(url, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers,
     body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
+    credentials: "include", // Keep for session-based auth fallback
   });
 
   await throwIfResNotOk(res);
@@ -29,8 +74,17 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
+    const tokens = getTokens();
+    const headers: Record<string, string> = {};
+
+    // Add JWT token if available
+    if (tokens?.accessToken) {
+      headers.Authorization = `Bearer ${tokens.accessToken}`;
+    }
+
     const res = await fetch(queryKey.join("/") as string, {
-      credentials: "include",
+      headers,
+      credentials: "include", // Keep for session-based auth fallback
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
