@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { mockTools, mockCategories } from "@/lib/mockData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
@@ -25,7 +24,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import type { Tool, Category } from "@shared/schema";
 
 export default function Tools() {
   const { isAuthenticated } = useAuth();

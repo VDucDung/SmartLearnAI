@@ -339,7 +339,7 @@ export default function PurchasedTools() {
             <DialogHeader>
               <DialogTitle>Đổi License Key</DialogTitle>
               <DialogDescription>
-                Nhập key mới cho công cụ {selectedPurchase?.tool.name}
+                Nhập key mới cho công cụ {selectedPurchase?.toolId}
               </DialogDescription>
             </DialogHeader>
             
