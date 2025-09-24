@@ -1,5 +1,8 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+// API Configuration
+const API_BASE_URL = 'https://shopnro.hitly.click';
+
 // Token storage helper functions
 export const getTokens = () => {
   try {
@@ -57,7 +60,10 @@ export async function apiRequest(
     headers.Authorization = `Bearer ${tokens.accessToken}`;
   }
 
-  const res = await fetch(url, {
+  // Construct full URL with API base URL
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+
+  const res = await fetch(fullUrl, {
     method,
     headers,
     body: data ? JSON.stringify(data) : undefined,
@@ -82,7 +88,11 @@ export const getQueryFn: <T>(options: {
       headers.Authorization = `Bearer ${tokens.accessToken}`;
     }
 
-    const res = await fetch(queryKey.join("/") as string, {
+    // Construct full URL with API base URL
+    const path = queryKey.join("/") as string;
+    const fullUrl = path.startsWith('http') ? path : `${API_BASE_URL}${path}`;
+
+    const res = await fetch(fullUrl, {
       headers,
       credentials: "include", // Keep for session-based auth fallback
     });

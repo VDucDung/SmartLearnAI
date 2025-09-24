@@ -56,7 +56,7 @@ export default function Checkout() {
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "https://shopnro.hitly.click/api/login";
       }, 500);
     }
   }, [isAuthenticated, toast]);
@@ -116,7 +116,7 @@ export default function Checkout() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "https://shopnro.hitly.click/api/login";
         }, 500);
         return;
       }
@@ -172,7 +172,7 @@ export default function Checkout() {
             <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h1 className="text-2xl font-bold mb-2">Cần đăng nhập</h1>
             <p className="text-muted-foreground mb-4">Vui lòng đăng nhập để tiếp tục</p>
-            <Button onClick={() => window.location.href = "/api/login"} data-testid="button-login-checkout">
+            <Button onClick={() => window.location.href = "https://shopnro.hitly.click/api/login"} data-testid="button-login-checkout">
               Đăng nhập
             </Button>
           </div>

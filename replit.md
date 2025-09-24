@@ -1,6 +1,8 @@
 # Overview
 
-This is a React-based tool marketplace application called "TOOL NRO" - a Vietnamese platform for purchasing gaming tools and automation software. The application allows users to browse, purchase, and manage digital tools with integrated payment processing and user authentication. It features a modern UI built with React, TypeScript, and Tailwind CSS, providing both customer-facing functionality and admin panel capabilities.
+This is a React-based tool marketplace application called "TOOL NRO" - a Vietnamese platform for purchasing gaming tools and automation software. The application allows users to browse, purchase, and manage digital tools with integrated payment processing and user authentication. It features a modern UI built with React, TypeScript, and Tailwind CSS, providing both customer-facing functionality and admin panel capabilities. 
+
+**Note**: This has been converted to a frontend-only application, removing the backend components for simpler deployment and maintenance. The application now works as a static React app that can connect to external APIs.
 
 # User Preferences
 

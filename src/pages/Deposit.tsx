@@ -62,7 +62,7 @@ export default function Deposit() {
           variant: "destructive",
         });
         setTimeout(() => {
-          window.location.href = "/api/login";
+          window.location.href = "https://shopnro.hitly.click/api/login";
         }, 500);
         return;
       }

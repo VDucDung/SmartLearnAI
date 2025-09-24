@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/ThemeProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { Moon, Sun, Menu, User, Send, Wrench, Server, LogOut } from "lucide-react";
 import {
   DropdownMenu,
@@ -24,12 +25,7 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/api/auth/demo-logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await apiRequest("POST", "/api/auth/demo-logout");
 
       if (response.ok) {
         toast({
@@ -39,12 +35,12 @@ export function Header() {
         window.location.reload();
       } else {
         // Fallback to original logout for non-demo users
-        window.location.href = "/api/logout";
+        window.location.href = "https://shopnro.hitly.click/api/logout";
       }
     } catch (error) {
       console.error("Logout error:", error);
       // Fallback to original logout
-      window.location.href = "/api/logout";
+      window.location.href = "https://shopnro.hitly.click/api/logout";
     }
   };
 

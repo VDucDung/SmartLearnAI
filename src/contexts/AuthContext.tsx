@@ -177,12 +177,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
         // Try to verify the token by fetching user data
         try {
-          const response = await fetch('/api/auth/user', {
-            headers: {
-              Authorization: `Bearer ${storedTokens.accessToken}`,
-            },
-            credentials: 'include',
-          });
+          const response = await apiRequest('GET', '/api/auth/user');
 
           if (response.ok) {
             const userData = await response.json();
