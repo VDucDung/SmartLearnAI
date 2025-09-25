@@ -1,43 +1,24 @@
+/**
+ * Legacy Query Client
+ * This file maintains backward compatibility while the codebase migrates to the new API structure
+ * @deprecated Use the new API structure from '@/lib/api' instead
+ */
+
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { apiClient, tokenManager, API_CONFIG } from './api';
 
-// API Configuration
-const API_BASE_URL = 'https://shopnro.hitly.click';
+// Legacy API Configuration - kept for backward compatibility
+// @deprecated Use API_CONFIG from '@/lib/api/config' instead
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
-// Token storage helper functions
-export const getTokens = () => {
-  try {
-    const tokens = localStorage.getItem('auth_tokens');
-    return tokens ? JSON.parse(tokens) : null;
-  } catch {
-    return null;
-  }
-};
+// Token storage helper functions - re-exported from new API structure
+// @deprecated Use tokenManager from '@/lib/api/client' instead
+export const getTokens = tokenManager.getTokens;
+export const setTokens = tokenManager.setTokens;
+export const getUser = tokenManager.getUser;
+export const setUser = tokenManager.setUser;
 
-export const setTokens = (tokens: { accessToken: string; refreshToken: string } | null) => {
-  if (tokens) {
-    localStorage.setItem('auth_tokens', JSON.stringify(tokens));
-  } else {
-    localStorage.removeItem('auth_tokens');
-  }
-};
-
-export const getUser = () => {
-  try {
-    const user = localStorage.getItem('auth_user');
-    return user ? JSON.parse(user) : null;
-  } catch {
-    return null;
-  }
-};
-
-export const setUser = (user: any) => {
-  if (user) {
-    localStorage.setItem('auth_user', JSON.stringify(user));
-  } else {
-    localStorage.removeItem('auth_user');
-  }
-};
-
+// Legacy error handling function
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -45,6 +26,8 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// Legacy API request function - maintained for backward compatibility
+// @deprecated Use apiClient from '@/lib/api/client' instead
 export async function apiRequest(
   method: string,
   url: string,
@@ -74,6 +57,8 @@ export async function apiRequest(
   return res;
 }
 
+// Legacy query function - maintained for backward compatibility
+// @deprecated Use the new API hooks from '@/lib/api/hooks' instead
 type UnauthorizedBehavior = "returnNull" | "throw";
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
@@ -105,6 +90,8 @@ export const getQueryFn: <T>(options: {
     return await res.json();
   };
 
+// Legacy query client - maintained for backward compatibility
+// @deprecated Consider using the new query client configuration from '@/lib/api'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
